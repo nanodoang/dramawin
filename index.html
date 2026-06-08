@@ -375,6 +375,7 @@ header { position: sticky; top: 0; z-index: 100; background: rgba(13,10,26,0.9);
       <button class="main-tab" onclick="switchTab('koin')">🪙 Koin Gratis</button>
       <button class="main-tab" onclick="switchTab('leaderboard')">🏆 Leaderboard</button>
       <button class="main-tab" onclick="switchTab('redeem')">🎁 Hadiah</button>
+      <button class="main-tab" onclick="switchTab('referral')">👥 Referral</button>
     </div>
 
     <!-- TAB: NONTON -->
@@ -592,6 +593,88 @@ header { position: sticky; top: 0; z-index: 100; background: rgba(13,10,26,0.9);
       <div class="redeem-history" id="redeemHistory">
         <div class="redeem-history-title">Riwayat</div>
         <div id="redeemHistoryList"></div>
+      </div>
+    </div>
+
+    <!-- TAB: REFERRAL -->
+    <div class="tab-panel" id="panel-referral">
+      <!-- Hero -->
+      <div style="background:linear-gradient(135deg,rgba(65,88,208,0.2),rgba(200,80,192,0.15));border:1px solid rgba(245,200,66,0.2);border-radius:14px;padding:22px;margin-bottom:20px;text-align:center">
+        <div style="font-size:2.5rem;margin-bottom:8px">👥</div>
+        <div style="font-family:'Playfair Display',serif;font-size:1.2rem;font-weight:700;margin-bottom:6px">Ajak Teman, Dapat Koin!</div>
+        <div style="font-size:0.84rem;color:var(--muted);line-height:1.6;margin-bottom:16px">Setiap teman yang kamu ajak daftar & nonton pertama kali,<br>kamu dapat <strong style="color:var(--gold)">+50 koin</strong> dan temanmu dapat <strong style="color:var(--green)">+20 koin</strong> bonus!</div>
+        <div style="background:var(--surface2);border:2px dashed rgba(245,200,66,0.4);border-radius:10px;padding:14px;margin-bottom:14px">
+          <div style="font-size:0.74rem;color:var(--muted);margin-bottom:6px">🔗 Link Referral Kamu</div>
+          <div style="font-size:0.88rem;font-weight:600;color:var(--gold);word-break:break-all" id="refLink">nanodoang.github.io/dramawin?ref=USER123</div>
+        </div>
+        <div style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap">
+          <button onclick="copyRefLink()" style="background:linear-gradient(135deg,var(--accent2),var(--accent));border:none;border-radius:8px;padding:9px 20px;color:#fff;font-weight:700;font-size:0.84rem;cursor:pointer;font-family:inherit">📋 Copy Link</button>
+          <button onclick="shareWA()" style="background:#25D366;border:none;border-radius:8px;padding:9px 20px;color:#fff;font-weight:700;font-size:0.84rem;cursor:pointer;font-family:inherit">💬 Share WA</button>
+          <button onclick="shareTikTok()" style="background:#000;border:none;border-radius:8px;padding:9px 20px;color:#fff;font-weight:700;font-size:0.84rem;cursor:pointer;font-family:inherit">🎵 TikTok</button>
+          <button onclick="shareIG()" style="background:linear-gradient(135deg,#E1306C,#F77737);border:none;border-radius:8px;padding:9px 20px;color:#fff;font-weight:700;font-size:0.84rem;cursor:pointer;font-family:inherit">📷 Instagram</button>
+        </div>
+      </div>
+
+      <!-- Stats referral -->
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:20px">
+        <div style="background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:16px;text-align:center">
+          <div style="font-size:1.8rem;font-weight:700;color:var(--gold)" id="refCount">0</div>
+          <div style="font-size:0.74rem;color:var(--muted);margin-top:4px">Teman Diajak</div>
+        </div>
+        <div style="background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:16px;text-align:center">
+          <div style="font-size:1.8rem;font-weight:700;color:var(--green)" id="refCoins">0</div>
+          <div style="font-size:0.74rem;color:var(--muted);margin-top:4px">Koin dari Referral</div>
+        </div>
+        <div style="background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:16px;text-align:center">
+          <div style="font-size:1.8rem;font-weight:700;color:var(--accent)" id="refRank">#-</div>
+          <div style="font-size:0.74rem;color:var(--muted);margin-top:4px">Rank Referrer</div>
+        </div>
+      </div>
+
+      <!-- Cara kerja -->
+      <div style="font-size:0.76rem;font-weight:700;letter-spacing:1.5px;color:var(--muted);text-transform:uppercase;margin-bottom:12px">📋 Cara Kerja</div>
+      <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:20px">
+        <div style="background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:12px 16px;display:flex;align-items:center;gap:12px">
+          <div style="width:28px;height:28px;background:linear-gradient(135deg,var(--accent2),var(--accent));border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:0.8rem;font-weight:700;color:#fff;flex-shrink:0">1</div>
+          <div><div style="font-size:0.84rem;font-weight:600">Copy link referral kamu</div><div style="font-size:0.74rem;color:var(--muted)">Link unik berisi kode referral kamu</div></div>
+        </div>
+        <div style="background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:12px 16px;display:flex;align-items:center;gap:12px">
+          <div style="width:28px;height:28px;background:linear-gradient(135deg,var(--accent2),var(--accent));border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:0.8rem;font-weight:700;color:#fff;flex-shrink:0">2</div>
+          <div><div style="font-size:0.84rem;font-weight:600">Share ke teman via WA / TikTok / IG</div><div style="font-size:0.74rem;color:var(--muted)">Makin banyak share, makin banyak koin</div></div>
+        </div>
+        <div style="background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:12px 16px;display:flex;align-items:center;gap:12px">
+          <div style="width:28px;height:28px;background:linear-gradient(135deg,var(--accent2),var(--accent));border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:0.8rem;font-weight:700;color:#fff;flex-shrink:0">3</div>
+          <div><div style="font-size:0.84rem;font-weight:600">Teman buka link & nonton pertama kali</div><div style="font-size:0.74rem;color:var(--muted)">Otomatis terdeteksi via kode referral</div></div>
+        </div>
+        <div style="background:var(--surface);border:1px solid rgba(245,200,66,0.3);border-radius:10px;padding:12px 16px;display:flex;align-items:center;gap:12px">
+          <div style="width:28px;height:28px;background:var(--gold);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:0.8rem;font-weight:700;color:#000;flex-shrink:0">🪙</div>
+          <div><div style="font-size:0.84rem;font-weight:600;color:var(--gold)">Kamu dapat +50 koin, teman dapat +20 koin!</div><div style="font-size:0.74rem;color:var(--muted)">Langsung masuk ke akun masing-masing</div></div>
+        </div>
+      </div>
+
+      <!-- Milestone bonus -->
+      <div style="font-size:0.76rem;font-weight:700;letter-spacing:1.5px;color:var(--muted);text-transform:uppercase;margin-bottom:12px">🏆 Bonus Milestone</div>
+      <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:10px">
+        <div style="background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:12px;text-align:center">
+          <div style="font-size:1.4rem;margin-bottom:4px">👥</div>
+          <div style="font-size:0.9rem;font-weight:700;color:var(--gold)">+100 Koin</div>
+          <div style="font-size:0.72rem;color:var(--muted);margin-top:3px">Ajak 5 teman</div>
+        </div>
+        <div style="background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:12px;text-align:center">
+          <div style="font-size:1.4rem;margin-bottom:4px">🎯</div>
+          <div style="font-size:0.9rem;font-weight:700;color:var(--gold)">+300 Koin</div>
+          <div style="font-size:0.72rem;color:var(--muted);margin-top:3px">Ajak 10 teman</div>
+        </div>
+        <div style="background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:12px;text-align:center">
+          <div style="font-size:1.4rem;margin-bottom:4px">🚀</div>
+          <div style="font-size:0.9rem;font-weight:700;color:var(--gold)">+1.000 Koin</div>
+          <div style="font-size:0.72rem;color:var(--muted);margin-top:3px">Ajak 25 teman</div>
+        </div>
+        <div style="background:var(--surface);border:1px solid rgba(200,80,192,0.3);border-radius:10px;padding:12px;text-align:center">
+          <div style="font-size:1.4rem;margin-bottom:4px">👑</div>
+          <div style="font-size:0.9rem;font-weight:700;color:var(--accent)">Premium Gratis!</div>
+          <div style="font-size:0.72rem;color:var(--muted);margin-top:3px">Ajak 50 teman</div>
+        </div>
       </div>
     </div>
 
@@ -1149,16 +1232,113 @@ function formatTime(s){return`${Math.floor(s/60)}:${(s%60).toString().padStart(2
 
 
 // ============================================================
-// TAB NAVIGATION
+// REFERRAL SYSTEM
+// ============================================================
+function generateRefCode() {
+  let code = localStorage.getItem('dk_refcode');
+  if (!code) {
+    code = 'DW' + Math.random().toString(36).substr(2,6).toUpperCase();
+    localStorage.setItem('dk_refcode', code);
+  }
+  return code;
+}
+
+function initReferral() {
+  const code = generateRefCode();
+  const link = `nanodoang.github.io/dramawin?ref=${code}`;
+  document.getElementById('refLink').textContent = link;
+
+  // Check if opened via referral link
+  const params = new URLSearchParams(window.location.search);
+  const ref = params.get('ref');
+  if (ref && ref !== code && !localStorage.getItem('dk_ref_claimed')) {
+    localStorage.setItem('dk_ref_claimed', '1');
+    setTimeout(() => {
+      awardCoins(20, '🎉 Bonus referral dari teman!');
+      showToast('🎉','Selamat Datang!','Kamu dapat +20 koin bonus dari referral teman!');
+    }, 1500);
+  }
+
+  updateRefStats();
+}
+
+function updateRefStats() {
+  const refs = JSON.parse(localStorage.getItem('dk_refs') || '[]');
+  const refCoins = refs.length * 50;
+  document.getElementById('refCount').textContent = refs.length;
+  document.getElementById('refCoins').textContent = refCoins;
+  const rank = refs.length >= 50 ? '#1 👑' : refs.length >= 25 ? '#Top 5' : refs.length >= 10 ? '#Top 20' : refs.length >= 5 ? '#Top 50' : '#-';
+  document.getElementById('refRank').textContent = rank;
+}
+
+function copyRefLink() {
+  const code = generateRefCode();
+  const link = `https://nanodoang.github.io/dramawin?ref=${code}`;
+  navigator.clipboard.writeText(link).then(() => {
+    showToast('📋','Link Disalin!','Paste di WA, TikTok, atau Instagram kamu!');
+  }).catch(() => {
+    showToast('📋','Link Referral',link);
+  });
+}
+
+function shareWA() {
+  const code = generateRefCode();
+  const link = `https://nanodoang.github.io/dramawin?ref=${code}`;
+  const text = `Hei! Coba DramaWin — nonton drama Korea & Indo GRATIS dan bisa dapat GoPay/OVO dari koin! Beneran legit! 🎬🪙\n\nDaftar lewat link aku ya, kamu langsung dapat bonus +20 koin:\n${link}`;
+  window.open(`https://wa.me/?text=${encodeURIComponent(text)}`);
+}
+
+function shareTikTok() {
+  const code = generateRefCode();
+  const link = `https://nanodoang.github.io/dramawin?ref=${code}`;
+  navigator.clipboard.writeText(link).then(() => {
+    showToast('🎵','Link Disalin!','Paste link ke bio TikTok kamu ya!');
+  });
+}
+
+function shareIG() {
+  const code = generateRefCode();
+  const link = `https://nanodoang.github.io/dramawin?ref=${code}`;
+  navigator.clipboard.writeText(link).then(() => {
+    showToast('📷','Link Disalin!','Paste link ke bio Instagram atau Story kamu!');
+  });
+}
+
+// Simulate referral claim (demo)
+function simulateReferral() {
+  const refs = JSON.parse(localStorage.getItem('dk_refs') || '[]');
+  refs.push({ name: 'Teman ' + (refs.length+1), date: new Date().toLocaleDateString('id-ID') });
+  localStorage.setItem('dk_refs', JSON.stringify(refs));
+
+  // Check milestones
+  const milestones = {5:100, 10:300, 25:1000};
+  if (milestones[refs.length]) {
+    awardCoins(milestones[refs.length], `🎯 Milestone ${refs.length} teman!`);
+  } else {
+    awardCoins(50, `👥 Teman ke-${refs.length} bergabung!`);
+  }
+  if (refs.length === 50) {
+    localStorage.setItem('dk_plan', 'basic');
+    updatePlanUI();
+    showToast('👑','SELAMAT!','Kamu dapat Premium GRATIS karena ajak 50 teman!');
+  }
+  updateRefStats();
+  coinRainEffect();
+}
+
+// ============================================================
+// UPDATE switchTab untuk referral
 // ============================================================
 function switchTab(tab) {
+  const tabs = ['nonton','koin','leaderboard','redeem','referral'];
   document.querySelectorAll('.main-tab').forEach((t,i)=>{
-    t.classList.toggle('active', ['nonton','koin','leaderboard','redeem'][i]===tab);
+    t.classList.toggle('active', tabs[i]===tab);
   });
   document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
   document.getElementById(`panel-${tab}`).classList.add('active');
   if(tab==='leaderboard') renderLeaderboard('minggu');
   if(tab==='redeem') renderRedeem();
+  if(tab==='referral') updateRefStats();
 }
 
 // ============================================================
@@ -1502,6 +1682,7 @@ function coinRainEffect() {
 document.addEventListener('DOMContentLoaded', () => {
   updateEarnPanel();
   renderAll();
+  initReferral();
   setInterval(updateEarnPanel, 60000);
   document.getElementById('confirmModalBg').addEventListener('click', e=>{
     if(e.target===document.getElementById('confirmModalBg')) closeConfirm();
