@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>DramaKoin — Nonton Drama & Dapat Koin</title>
+<title>DramaWin — Nonton Drama, Menang Hadiah! 🎬🪙</title>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
 :root {
@@ -328,7 +328,7 @@ header { position: sticky; top: 0; z-index: 100; background: rgba(13,10,26,0.9);
 <body>
 
 <header>
-  <div class="logo">🎬 DramaKoin</div>
+  <div class="logo">🎬 DramaWin</div>
   <div class="header-right">
     <div class="coin-badge" onclick="openStore('coins')" title="Beli Koin">
       <span>🪙</span>
@@ -708,31 +708,43 @@ header { position: sticky; top: 0; z-index: 100; background: rgba(13,10,26,0.9);
 // DATA
 // ============================================================
 const dramas = [
-  { id:1, name:"Cinta di Musim Semi", emoji:"🌸", genre:"Romantis", premium:false,
+  { id:1, name:"Lovely Runner", emoji:"🌸", genre:"🇰🇷 Korea · Romantis", premium:false,
     episodes:[
-      {num:1,title:"Pertemuan Tak Terduga",ytId:"L_jWHffIx5E",duration:"45 mnt",premium:false},
-      {num:2,title:"Rahasia Hati",ytId:"C0DPdy98e4c",duration:"44 mnt",premium:false},
-      {num:3,title:"Janji di Bawah Hujan",ytId:"dQw4w9WgXcQ",duration:"46 mnt",premium:true},
-      {num:4,title:"Cemburu",ytId:"9bZkp7q19f0",duration:"43 mnt",premium:true},
+      {num:1,title:"Kembali ke Masa Lalu",ytId:"s1j-rcvSP5k",duration:"Trailer",premium:false},
+      {num:2,title:"Idola Impian",ytId:"s1j-rcvSP5k",duration:"Ep 2",premium:false},
+      {num:3,title:"Misteri Waktu",ytId:"s1j-rcvSP5k",duration:"Ep 3",premium:true},
+      {num:4,title:"Cinta Lintas Zaman",ytId:"s1j-rcvSP5k",duration:"Ep 4",premium:true},
     ]},
-  { id:2, name:"Detektif Bayangan", emoji:"🕵️", genre:"Thriller", premium:true,
+  { id:2, name:"CEO Menyamar Jadi Buruh", emoji:"💼", genre:"🇨🇳 China · Romantis", premium:false,
     episodes:[
-      {num:1,title:"Kasus Pertama",ytId:"L_jWHffIx5E",duration:"50 mnt",premium:true},
-      {num:2,title:"Jejak Tersembunyi",ytId:"C0DPdy98e4c",duration:"48 mnt",premium:true},
-      {num:3,title:"Saksi Bisu",ytId:"dQw4w9WgXcQ",duration:"51 mnt",premium:true},
+      {num:1,title:"Pertemuan Tak Sengaja",ytId:"Gg_LMZKFbjI",duration:"Full Movie",premium:false},
+      {num:2,title:"Rahasia Sang CEO",ytId:"Gg_LMZKFbjI",duration:"Ep 2",premium:false},
+      {num:3,title:"Cinta Terlarang",ytId:"Gg_LMZKFbjI",duration:"Ep 3",premium:true},
     ]},
-  { id:3, name:"Keluarga Bahagia", emoji:"🏡", genre:"Keluarga", premium:false,
+  { id:3, name:"Cinta Tak Seindah Drakor", emoji:"🎬", genre:"🇮🇩 Indonesia · Komedi", premium:false,
     episodes:[
-      {num:1,title:"Rumah Baru",ytId:"L_jWHffIx5E",duration:"40 mnt",premium:false},
-      {num:2,title:"Konflik Kecil",ytId:"C0DPdy98e4c",duration:"42 mnt",premium:false},
-      {num:3,title:"Maaf dan Damai",ytId:"dQw4w9WgXcQ",duration:"41 mnt",premium:true},
-      {num:4,title:"Liburan Bersama",ytId:"9bZkp7q19f0",duration:"43 mnt",premium:true},
+      {num:1,title:"Mimpi ala Drakor",ytId:"s1j-rcvSP5k",duration:"Ep 1",premium:false},
+      {num:2,title:"Realita Cinta",ytId:"Gg_LMZKFbjI",duration:"Ep 2",premium:false},
+      {num:3,title:"Happy Ending",ytId:"s1j-rcvSP5k",duration:"Ep 3",premium:true},
     ]},
-  { id:4, name:"Sang Pewaris", emoji:"👑", genre:"Drama", premium:true,
+  { id:4, name:"Sinetron RCTI — Cinta Abadi", emoji:"❤️", genre:"🇮🇩 Indonesia · Drama", premium:false,
     episodes:[
-      {num:1,title:"Warisan Terlarang",ytId:"L_jWHffIx5E",duration:"55 mnt",premium:true},
-      {num:2,title:"Konspirasi Istana",ytId:"C0DPdy98e4c",duration:"53 mnt",premium:true},
-      {num:3,title:"Pengkhianat",ytId:"dQw4w9WgXcQ",duration:"56 mnt",premium:true},
+      {num:1,title:"Awal Perjuangan",ytId:"Gg_LMZKFbjI",duration:"Ep 1",premium:false},
+      {num:2,title:"Ujian Cinta",ytId:"s1j-rcvSP5k",duration:"Ep 2",premium:false},
+      {num:3,title:"Air Mata Ibu",ytId:"Gg_LMZKFbjI",duration:"Ep 3",premium:true},
+      {num:4,title:"Pengorbanan",ytId:"s1j-rcvSP5k",duration:"Ep 4",premium:true},
+    ]},
+  { id:5, name:"When Life Gives You Tangerines", emoji:"🍊", genre:"🇰🇷 Korea · Netflix", premium:true,
+    episodes:[
+      {num:1,title:"Mimpi di Jeju",ytId:"s1j-rcvSP5k",duration:"Ep 1",premium:true},
+      {num:2,title:"IU & Park Bo Gum",ytId:"s1j-rcvSP5k",duration:"Ep 2",premium:true},
+      {num:3,title:"Perjuangan Cinta",ytId:"s1j-rcvSP5k",duration:"Ep 3",premium:true},
+    ]},
+  { id:6, name:"Presiden Menyamar Jadi Rakyat", emoji:"👑", genre:"🇨🇳 China · Romantis", premium:true,
+    episodes:[
+      {num:1,title:"Sang Presiden Menyamar",ytId:"Gg_LMZKFbjI",duration:"Full Movie",premium:true},
+      {num:2,title:"Cinta Sejati",ytId:"Gg_LMZKFbjI",duration:"Ep 2",premium:true},
+      {num:3,title:"Takdir Bersama",ytId:"Gg_LMZKFbjI",duration:"Ep 3",premium:true},
     ]},
 ];
 
