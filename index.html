@@ -2229,6 +2229,11 @@ function renderCost(){
     byBulan[bln].cost += cost; byBulan[bln].m3 += m3;
   });
 
+  console.log('COST DEBUG — kolom Actual:', colActual, '| kolom M3:', colM3);
+  console.log('COST DEBUG — contoh nilai Actual baris 1:', costData[0][colActual], '=> toNumber:', toNumber(costData[0][colActual]));
+  console.log('COST DEBUG — contoh nilai M3 baris 1:', costData[0][colM3], '=> toNumber:', toNumber(costData[0][colM3]));
+  console.log('COST DEBUG — totalCost:', totalCost, '| totalM3:', totalM3);
+
   const avgRate = totalM3 ? totalCost/totalM3 : 0;
   document.getElementById('costKpiActual').textContent = fmtRupiah(totalCost);
   document.getElementById('costKpiM3').textContent = totalM3.toLocaleString('id-ID',{maximumFractionDigits:1});
