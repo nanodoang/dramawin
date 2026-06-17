@@ -2159,8 +2159,18 @@ function toNumber(v){
   } else if(hasComma){
     // Hanya koma: anggap desimal Indonesia (1,00 -> 1.00)
     s = s.replace(',', '.');
+  } else if(hasDot){
+    // Hanya titik: bisa ribuan (2.450.000) atau desimal (2.45)
+    const parts = s.split('.');
+    // Jika ada >1 titik, ATAU bagian setelah titik tepat 3 digit (dan bukan satu2nya), anggap pemisah ribuan
+    if(parts.length > 2){
+      s = s.replace(/\./g, ''); // 2.450.000 -> 2450000
+    } else if(parts.length === 2 && parts[1].length === 3 && parts[0].length <= 3){
+      // contoh 339.336 -> ribuan (339336), tapi 2.45 -> desimal
+      s = s.replace(/\./g, '');
+    }
+    // selain itu biarkan (mis. 2.45 = desimal)
   }
-  // hanya titik atau tanpa keduanya: biarkan apa adanya
 
   const n = parseFloat(s);
   return isNaN(n) ? 0 : n;
@@ -2228,11 +2238,6 @@ function renderCost(){
     if(!byBulan[bln]) byBulan[bln] = {cost:0, m3:0};
     byBulan[bln].cost += cost; byBulan[bln].m3 += m3;
   });
-
-  console.log('COST DEBUG — kolom Actual:', colActual, '| kolom M3:', colM3);
-  console.log('COST DEBUG — contoh nilai Actual baris 1:', costData[0][colActual], '=> toNumber:', toNumber(costData[0][colActual]));
-  console.log('COST DEBUG — contoh nilai M3 baris 1:', costData[0][colM3], '=> toNumber:', toNumber(costData[0][colM3]));
-  console.log('COST DEBUG — totalCost:', totalCost, '| totalM3:', totalM3);
 
   const avgRate = totalM3 ? totalCost/totalM3 : 0;
   document.getElementById('costKpiActual').textContent = fmtRupiah(totalCost);
