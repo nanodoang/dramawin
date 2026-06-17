@@ -692,52 +692,43 @@
   <div class="report-page" id="pageArmada">
     <div class="card" style="margin-bottom:18px;">
       <h2>Sumber Data — Pemenuhan Armada</h2>
-      <div class="sourcebar" style="padding:0;border:none;margin-bottom:14px;">
-        <input type="text" id="armadaUrl" placeholder="Tempel link CSV publish 'Pemenuhan Armada'..." value="https://docs.google.com/spreadsheets/d/e/2PACX-1vSGz9K1a7v-1BFLSWdCjrboAwAcg8w1fYK98pdGhdEHqj_q9hnqvRWjPdt1UubexOQ_IgOy7QGPS-3G/pub?gid=1123205242&single=true&output=csv">
-        <input type="text" id="armadaSkip" placeholder="Skip baris" value="0" style="max-width:90px;flex:none;">
-        <button onclick="loadArmada()">Muat Data</button>
-        <span class="status" id="armadaSync">Belum dimuat</span>
+      <div class="sourcebar" style="padding:0;border:none;margin-bottom:8px;">
+        <span style="font-size:.8rem;color:var(--muted);min-width:80px;">HIT (kolom AA):</span>
+        <input type="text" id="armadaHitUrl" placeholder="Link CSV data HIT..." value="https://docs.google.com/spreadsheets/d/e/2PACX-1vQKpOyj1keIPjx7GoxdDbGUOLlo9S6YpwKSdBz3piVmV4Vvryu3jNSPd9zeIG2Dfclq4ga6NyayqvK0/pub?gid=1459834740&single=true&output=csv">
+        <input type="text" id="armadaHitSkip" placeholder="Skip" value="0" style="max-width:70px;flex:none;">
       </div>
-      <div class="mapping-bar" id="armadaMapping" style="display:none;">
-        <label>Kolom Bulan <select id="armadaColBulan"></select></label>
-        <label>Kolom Kategori (Ekspedisi) <select id="armadaColKategori"></select></label>
-        <label>Kolom Jenis Armada (Darat/Laut) <select id="armadaColJenis"></select></label>
-        <label>Kolom Request Unit <select id="armadaColRequest"></select></label>
-        <label>Kolom Realisasi Unit <select id="armadaColRealisasi"></select></label>
-        <label>Kolom Tanggal Plan <select id="armadaColPlan"></select></label>
-        <label>Kolom Tanggal Datang Pabrik <select id="armadaColDatang"></select></label>
-        <button onclick="renderArmada()">Terapkan</button>
-      </div>
-
-      <div class="pill-group" id="pillArmadaBulan" style="display:none;">
-        <div class="pill-label">Bulan</div>
-        <div class="pill active" data-value="">Semua</div>
-      </div>
-      <div class="pill-group" id="pillArmadaWeek" style="display:none;">
-        <div class="pill-label">Week</div>
-        <div class="pill active" data-value="">Semua</div>
-      </div>
-      <div class="pill-group" id="pillArmadaExped" style="display:none;">
-        <div class="pill-label">Ekspedisi</div>
-        <div class="pill active" data-value="">Semua</div>
+      <div class="sourcebar" style="padding:0;border:none;margin-bottom:8px;">
+        <span style="font-size:.8rem;color:var(--muted);min-width:80px;">MISS:</span>
+        <input type="text" id="armadaMissUrl" placeholder="Link CSV data MISS..." value="https://docs.google.com/spreadsheets/d/e/2PACX-1vQKpOyj1keIPjx7GoxdDbGUOLlo9S6YpwKSdBz3piVmV4Vvryu3jNSPd9zeIG2Dfclq4ga6NyayqvK0/pub?gid=1720095364&single=true&output=csv">
+        <input type="text" id="armadaMissSkip" placeholder="Skip" value="0" style="max-width:70px;flex:none;">
+        <button onclick="loadArmadaAll()">Muat Data</button>
+        <span class="status" id="armadaAllSync">Belum dimuat</span>
       </div>
     </div>
 
-    <div class="card" id="armadaAGCard" style="display:none;">
-      <h2>Pemenuhan Armada (HIT = Kolom AG bernilai 1)</h2>
-      <div class="pill-group" id="pillArmadaAGExped">
+    <div class="card" id="pemenuhanCard" style="display:none;">
+      <h2>Pemenuhan Armada</h2>
+      <div class="mapping-bar" id="pemMapping">
+        <label>Kolom HIT (angka) <select id="pemColHit"></select></label>
+        <label>Kolom Bulan <select id="pemColBulan"></select></label>
+        <label>Kolom Tanggal (utk Week) <select id="pemColDate"></select></label>
+        <label>Kolom Ekspedisi <select id="pemColExped"></select></label>
+        <label>Kolom Jenis (Darat/Laut) <select id="pemColJenis"></select></label>
+        <button onclick="renderPemenuhan()">Terapkan</button>
+      </div>
+      <div class="pill-group" id="pillPemExped">
         <div class="pill-label">Ekspedisi</div>
         <div class="pill active" data-value="">Semua</div>
       </div>
-      <div class="pill-group" id="pillArmadaAGBulan">
+      <div class="pill-group" id="pillPemBulan">
         <div class="pill-label">Bulan</div>
         <div class="pill active" data-value="">Semua</div>
       </div>
-      <div class="pill-group" id="pillArmadaAGWeek">
+      <div class="pill-group" id="pillPemWeek">
         <div class="pill-label">Week</div>
         <div class="pill active" data-value="">Semua</div>
       </div>
-      <div class="pill-group" id="pillArmadaAGQuartal">
+      <div class="pill-group" id="pillPemQuartal">
         <div class="pill-label">Quartal</div>
         <div class="pill active" data-value="">Semua</div>
         <div class="pill" data-value="Q1">Q1 (Jan-Mar)</div>
@@ -747,218 +738,50 @@
       </div>
 
       <div class="kpi-row" style="margin:14px 0;">
-        <div class="kpi">
-          <div class="label">Total</div>
-          <div class="value" id="armadaAGKpiTotal">0</div>
+        <div class="kpi"><div class="label">Plan (Hit + Miss)</div><div class="value" id="pemKpiPlan">0</div></div>
+        <div class="kpi green"><div class="label">HIT (Total Kolom AA)</div><div class="value" id="pemKpiHit">0</div></div>
+        <div class="kpi red"><div class="label">MISS</div><div class="value" id="pemKpiMiss">0</div></div>
+        <div class="kpi amber"><div class="label">% Pemenuhan</div><div class="value" id="pemKpiPct">0%</div></div>
+      </div>
+
+      <div class="grid2">
+        <div class="card">
+          <h2>Pemenuhan per Bulan — Darat/Truck</h2>
+          <div class="chart-wrap"><canvas id="chartPemBulanDarat"></canvas></div>
         </div>
-        <div class="kpi green">
-          <div class="label">HIT (AG = 1)</div>
-          <div class="value" id="armadaAGKpiHit">0</div>
-        </div>
-        <div class="kpi red">
-          <div class="label">MISS</div>
-          <div class="value" id="armadaAGKpiMiss">0</div>
-        </div>
-        <div class="kpi amber">
-          <div class="label">% HIT</div>
-          <div class="value" id="armadaAGKpiPct">0%</div>
+        <div class="card">
+          <h2>Pemenuhan per Bulan — Laut/Kontener</h2>
+          <div class="chart-wrap"><canvas id="chartPemBulanLaut"></canvas></div>
         </div>
       </div>
 
       <div class="grid2">
         <div class="card">
-          <h2>HIT vs MISS per Bulan</h2>
-          <div class="chart-wrap"><canvas id="chartArmadaAGBulan"></canvas></div>
+          <h2>Pemenuhan per Ekspedisi — Darat/Truck</h2>
+          <div class="chart-wrap"><canvas id="chartPemExpedDarat"></canvas></div>
         </div>
         <div class="card">
-          <h2>HIT vs MISS per Ekspedisi</h2>
-          <div class="chart-wrap"><canvas id="chartArmadaAGExped"></canvas></div>
+          <h2>Pemenuhan per Ekspedisi — Laut/Kontener</h2>
+          <div class="chart-wrap"><canvas id="chartPemExpedLaut"></canvas></div>
         </div>
       </div>
-      <div class="table-scroll" style="max-height:360px;">
-        <table>
-          <thead><tr><th>Kategori</th><th>Total</th><th>HIT</th><th>MISS</th><th>% HIT</th></tr></thead>
-          <tbody id="armadaAGBody"></tbody>
-        </table>
-      </div>
-    </div>
 
-    <div class="card" style="margin-bottom:18px;">
-      <h2>Sumber Data — Miss Pemenuhan Armada</h2>
-      <p style="font-size:.8rem;color:var(--muted);margin:-6px 0 12px;">Hit dihitung dari jumlah baris di data Transport Cost (per Bulan & Kategori), Miss dari sheet ini, Total = Hit + Miss.</p>
-      <div class="sourcebar" style="padding:0;border:none;margin-bottom:14px;">
-        <input type="text" id="armadaMissUrl" placeholder="Tempel link CSV publish 'Data Miss Armada'..." value="https://docs.google.com/spreadsheets/d/e/2PACX-1vQKpOyj1keIPjx7GoxdDbGUOLlo9S6YpwKSdBz3piVmV4Vvryu3jNSPd9zeIG2Dfclq4ga6NyayqvK0/pub?gid=1720095364&single=true&output=csv">
-        <input type="text" id="armadaMissSkip" placeholder="Skip baris" value="0" style="max-width:90px;flex:none;">
-        <button onclick="loadArmadaMiss()">Muat Data</button>
-        <span class="status" id="armadaMissSync">Belum dimuat</span>
-      </div>
-      <div class="mapping-bar" id="armadaMissMapping" style="display:none;">
-        <label>Kolom Bulan <select id="armadaMissColBulan"></select></label>
-        <label>Kolom Kategori (Ekspedisi) <select id="armadaMissColKategori"></select></label>
-        <label>Kolom Jumlah Miss <select id="armadaMissColJumlah"></select></label>
-        <button onclick="renderArmadaPemenuhan()">Terapkan</button>
-      </div>
-    </div>
-
-    <div class="card" id="armadaPemenuhanCard" style="display:none;">
-      <h2>Pemenuhan Armada — Data dari Transport Cost</h2>
-      <div class="kpi-row" style="margin-bottom:18px;">
-        <div class="kpi green">
-          <div class="label">Total Hit</div>
-          <div class="value" id="pemenuhanKpiHit">0</div>
-        </div>
-        <div class="kpi red">
-          <div class="label">Total Miss</div>
-          <div class="value" id="pemenuhanKpiMiss">0</div>
-        </div>
-        <div class="kpi">
-          <div class="label">Total</div>
-          <div class="value" id="pemenuhanKpiTotal">0</div>
-        </div>
-        <div class="kpi amber">
-          <div class="label">% Pemenuhan</div>
-          <div class="value" id="pemenuhanKpiPct">0%</div>
-        </div>
-      </div>
       <div class="grid2">
         <div class="card">
-          <h2>Pemenuhan per Bulan</h2>
-          <div class="chart-wrap"><canvas id="chartPemenuhanBulan"></canvas></div>
+          <h2>Pemenuhan per Week</h2>
+          <div class="chart-wrap"><canvas id="chartPemWeek"></canvas></div>
         </div>
         <div class="card">
-          <h2>Pemenuhan per Ekspedisi</h2>
-          <div class="chart-wrap"><canvas id="chartPemenuhanExped"></canvas></div>
+          <h2>Kontribusi Miss per Ekspedisi</h2>
+          <div class="chart-wrap"><canvas id="chartPemMissExped"></canvas></div>
         </div>
       </div>
-      <h2 style="margin:16px 0 8px;">Detail Pengiriman (dari Data Cost)</h2>
-      <div class="table-scroll" style="max-height:480px;">
+
+      <h2 style="margin:16px 0 8px;">Detail per Bulan & Ekspedisi</h2>
+      <div class="table-scroll" style="max-height:400px;">
         <table>
-          <thead>
-            <tr>
-              <th>Delivery Date</th>
-              <th>Expedition Code</th>
-              <th>Customer Name</th>
-              <th>Vehicle Type</th>
-              <th>Ship Point</th>
-              <th>Province</th>
-              <th>Qty M3</th>
-              <th>Rp/M³</th>
-              <th>Act Cost ratio %</th>
-              <th>Target Cost ratio %</th>
-              <th>TYPE</th>
-            </tr>
-          </thead>
-          <tbody id="pemenuhanBody"></tbody>
-        </table>
-      </div>
-    </div>
-
-    <div class="kpi-row" id="armadaKpiRow2" style="display:none;">
-      <div class="kpi green">
-        <div class="label">HIT (Datang ≤ Plan)</div>
-        <div class="value" id="armadaKpiHit">0</div>
-        <div class="sub" id="armadaKpiHitPct">0%</div>
-      </div>
-      <div class="kpi red">
-        <div class="label">MISS (Datang &gt; Plan)</div>
-        <div class="value" id="armadaKpiMiss">0</div>
-        <div class="sub" id="armadaKpiMissPct">0%</div>
-      </div>
-    </div>
-
-    <div class="kpi-row" id="armadaKpiRow" style="display:none;">
-      <div class="kpi">
-        <div class="label">Total Request Unit</div>
-        <div class="value" id="armadaKpiRequest">0</div>
-      </div>
-      <div class="kpi green">
-        <div class="label">Total Realisasi Unit</div>
-        <div class="value" id="armadaKpiRealisasi">0</div>
-      </div>
-      <div class="kpi orange">
-        <div class="label">Selisih (Kurang)</div>
-        <div class="value" id="armadaKpiGap">0</div>
-      </div>
-      <div class="kpi amber">
-        <div class="label">% Pemenuhan</div>
-        <div class="value" id="armadaKpiPct">0%</div>
-      </div>
-    </div>
-
-    <div class="grid2" id="armadaCharts" style="display:none;">
-      <div class="card">
-        <h2>Request vs Realisasi per Ekspedisi</h2>
-        <div class="chart-wrap"><canvas id="chartArmadaCat"></canvas></div>
-      </div>
-      <div class="card">
-        <h2>Tren Pemenuhan per Bulan</h2>
-        <div class="chart-wrap"><canvas id="chartArmadaBulan"></canvas></div>
-      </div>
-    </div>
-
-    <div class="grid2" id="armadaHitMissCharts" style="display:none;">
-      <div class="card">
-        <h2>HIT vs MISS per Week — Darat</h2>
-        <div class="chart-wrap"><canvas id="chartArmadaWeekDarat"></canvas></div>
-        <div class="table-scroll" style="margin-top:14px;max-height:300px;">
-          <table>
-            <thead><tr><th>Week</th><th>Plan (Total)</th><th>Hit</th><th>Miss</th><th>% Hit</th></tr></thead>
-            <tbody id="armadaWeekDaratBody"></tbody>
-          </table>
-        </div>
-      </div>
-      <div class="card">
-        <h2>HIT vs MISS per Week — Laut</h2>
-        <div class="chart-wrap"><canvas id="chartArmadaWeekLaut"></canvas></div>
-        <div class="table-scroll" style="margin-top:14px;max-height:300px;">
-          <table>
-            <thead><tr><th>Week</th><th>Plan (Total)</th><th>Hit</th><th>Miss</th><th>% Hit</th></tr></thead>
-            <tbody id="armadaWeekLautBody"></tbody>
-          </table>
-        </div>
-      </div>
-    </div>
-
-    <div class="grid2" id="armadaHitMissChartsBulan" style="display:none;">
-      <div class="card">
-        <h2>HIT vs MISS per Bulan — Darat</h2>
-        <div class="chart-wrap"><canvas id="chartArmadaBulanDarat"></canvas></div>
-        <div class="table-scroll" style="margin-top:14px;max-height:300px;">
-          <table>
-            <thead><tr><th>Bulan</th><th>Plan (Total)</th><th>Hit</th><th>Miss</th><th>% Hit</th></tr></thead>
-            <tbody id="armadaBulanDaratBody"></tbody>
-          </table>
-        </div>
-      </div>
-      <div class="card">
-        <h2>HIT vs MISS per Bulan — Laut</h2>
-        <div class="chart-wrap"><canvas id="chartArmadaBulanLaut"></canvas></div>
-        <div class="table-scroll" style="margin-top:14px;max-height:300px;">
-          <table>
-            <thead><tr><th>Bulan</th><th>Plan (Total)</th><th>Hit</th><th>Miss</th><th>% Hit</th></tr></thead>
-            <tbody id="armadaBulanLautBody"></tbody>
-          </table>
-        </div>
-      </div>
-    </div>
-
-    <div class="grid2" id="armadaExpedCharts" style="display:none;">
-      <div class="card">
-        <h2>Kontribusi MISS per Ekspedisi — Darat</h2>
-        <div class="chart-wrap"><canvas id="chartArmadaExpedDarat"></canvas></div>
-      </div>
-      <div class="card">
-        <h2>Kontribusi MISS per Ekspedisi — Laut</h2>
-        <div class="chart-wrap"><canvas id="chartArmadaExpedLaut"></canvas></div>
-      </div>
-    </div>
-
-    <div class="card" id="armadaTableCard" style="display:none;">
-      <h2>Data Pemenuhan Armada</h2>
-      <div class="table-scroll">
-        <table>
-          <thead><tr id="armadaHead"></tr></thead>
-          <tbody id="armadaBody"></tbody>
+          <thead><tr><th>Bulan</th><th>Ekspedisi</th><th>Jenis</th><th>Plan</th><th>Hit</th><th>Miss</th><th>% Pemenuhan</th></tr></thead>
+          <tbody id="pemBody"></tbody>
         </table>
       </div>
     </div>
@@ -974,39 +797,43 @@
         <span class="status" id="costSync">Belum dimuat</span>
       </div>
       <div class="mapping-bar" id="costMapping" style="display:none;">
-        <label>Kolom Bulan <select id="costColBulan"></select></label>
-        <label>Kolom Kategori (Ekspedisi) <select id="costColKategori"></select></label>
-        <label>Kolom Budget Cost <select id="costColBudget"></select></label>
-        <label>Kolom Actual Cost <select id="costColActual"></select></label>
-        <label>Kolom Jenis Armada (Kontener/Truck) <select id="costColVehicle"></select></label>
+        <label>Kolom Bulan/Tanggal <select id="costColBulan"></select></label>
+        <label>Kolom Ekspedisi <select id="costColKategori"></select></label>
+        <label>Kolom Jenis (Kontener/Truck) <select id="costColVehicle"></select></label>
         <label>Kolom Total M3 <select id="costColM3"></select></label>
+        <label>Kolom Total Cost (Price Exp) <select id="costColActual"></select></label>
+        <label>Kolom Rp/M³ (Rate) <select id="costColRate"></select></label>
         <button onclick="renderCost()">Terapkan</button>
       </div>
     </div>
 
     <div class="kpi-row" id="costKpiRow" style="display:none;">
       <div class="kpi">
-        <div class="label">Total Budget</div>
-        <div class="value" id="costKpiBudget">Rp 0</div>
-      </div>
-      <div class="kpi green">
-        <div class="label">Total Actual</div>
+        <div class="label">Total Cost</div>
         <div class="value" id="costKpiActual">Rp 0</div>
       </div>
-      <div class="kpi red" id="costKpiSelisihCard">
-        <div class="label">Selisih (Actual - Budget)</div>
-        <div class="value" id="costKpiSelisih">Rp 0</div>
-        <div class="sub" id="costKpiSelisihPct">0%</div>
+      <div class="kpi">
+        <div class="label">Total M3</div>
+        <div class="value" id="costKpiM3">0</div>
+      </div>
+      <div class="kpi green">
+        <div class="label">Rata² Rate (Rp/M³)</div>
+        <div class="value" id="costKpiRate">Rp 0</div>
+      </div>
+      <div class="kpi" id="costKpiSelisihCard">
+        <div class="label">Rate vs Target</div>
+        <div class="value" id="costKpiSelisih">-</div>
+        <div class="sub" id="costKpiSelisihPct"></div>
       </div>
     </div>
 
     <div class="grid2" id="costCharts" style="display:none;">
       <div class="card">
-        <h2>Budget vs Actual per Kategori</h2>
+        <h2>Rate (Rp/M³) per Ekspedisi</h2>
         <div class="chart-wrap"><canvas id="chartCostCat"></canvas></div>
       </div>
       <div class="card">
-        <h2>Tren Cost per Bulan</h2>
+        <h2>Rate (Rp/M³) per Bulan</h2>
         <div class="chart-wrap"><canvas id="chartCostBulan"></canvas></div>
       </div>
     </div>
@@ -1307,8 +1134,8 @@ function fillPills(containerId, values){
     pill.addEventListener('click', ()=>{
       container.querySelectorAll('.pill').forEach(p=>p.classList.remove('active'));
       pill.classList.add('active');
-      if(containerId.startsWith('pillArmada')){
-        if(armadaData.length) renderArmada();
+      if(containerId.startsWith('pillPem')){
+        if(pemHitData.length) renderPemenuhan();
       } else {
         if(rawData.length) renderAll();
       }
@@ -2256,14 +2083,11 @@ window.addEventListener('DOMContentLoaded', ()=>{
   if(document.getElementById('sheetUrl2').value.trim()){
     loadData2();
   }
-  if(document.getElementById('armadaUrl').value.trim()){
-    loadArmada();
+  if(document.getElementById('armadaHitUrl').value.trim()){
+    loadArmadaAll();
   }
   if(document.getElementById('costUrl').value.trim()){
     loadCost();
-  }
-  if(document.getElementById('armadaMissUrl').value.trim()){
-    loadArmadaMiss();
   }
 });
 
@@ -2315,8 +2139,30 @@ function genericLoad(url, skipEl, onSuccess, onStatus){
 
 function toNumber(v){
   if(v === null || v === undefined) return 0;
-  const cleaned = String(v).replace(/[^0-9.\-]/g, '');
-  const n = parseFloat(cleaned);
+  let s = String(v).trim();
+  if(s === '') return 0;
+  // Hapus karakter selain digit, koma, titik, minus
+  s = s.replace(/[^0-9.,\-]/g, '');
+  if(s === '' || s === '-') return 0;
+
+  const hasComma = s.includes(',');
+  const hasDot = s.includes('.');
+
+  if(hasComma && hasDot){
+    // Format Indonesia: titik = ribuan, koma = desimal (1.234,56)
+    if(s.lastIndexOf(',') > s.lastIndexOf('.')){
+      s = s.replace(/\./g, '').replace(',', '.');
+    } else {
+      // Format Inggris: koma = ribuan, titik = desimal (1,234.56)
+      s = s.replace(/,/g, '');
+    }
+  } else if(hasComma){
+    // Hanya koma: anggap desimal Indonesia (1,00 -> 1.00)
+    s = s.replace(',', '.');
+  }
+  // hanya titik atau tanpa keduanya: biarkan apa adanya
+
+  const n = parseFloat(s);
   return isNaN(n) ? 0 : n;
 }
 
@@ -2334,445 +2180,6 @@ function fillMappingSelect(id, fields, guesses){
 }
 
 /* ===================== PEMENUHAN ARMADA ===================== */
-let armadaData = [], armadaFields = [];
-function loadArmada(){
-  const url = document.getElementById('armadaUrl').value.trim();
-  if(!url){ alert('Masukkan link CSV publish dulu.'); return; }
-  genericLoad(url, document.getElementById('armadaSkip'),
-    (data, fields)=>{
-      armadaData = data; armadaFields = fields;
-      document.getElementById('armadaSync').textContent = 'Tersambung — ' + data.length + ' baris · update ' + new Date().toLocaleTimeString('id-ID');
-      document.getElementById('armadaMapping').style.display = 'none';
-      fillMappingSelect('armadaColBulan', fields, ['bulan','month']);
-      fillMappingSelect('armadaColKategori', fields, ['expedition','ekspedisi','region','vehicle','kategori']);
-      fillMappingSelect('armadaColRequest', fields, ['request','rencana','plan']);
-      fillMappingSelect('armadaColRealisasi', fields, ['realisasi','actual','real']);
-      fillMappingSelect('armadaColJenis', fields, ['jenis','vehicle','armada','tipe']);
-      fillMappingSelect('armadaColPlan', fields, ['plan','rencana']);
-      fillMappingSelect('armadaColDatang', fields, ['datang','arrival','tiba']);
-      renderArmadaAG();
-      renderArmada();
-    },
-    (msg)=>{ document.getElementById('armadaSync').textContent = msg; }
-  );
-}
-
-function populateArmadaFilters(){
-  const colBulan = document.getElementById('armadaColBulan').value;
-  const colKat = document.getElementById('armadaColKategori').value;
-  const colPlan = document.getElementById('armadaColPlan').value;
-
-  const prevBulan = getPillValue('pillArmadaBulan');
-  const prevExped = getPillValue('pillArmadaExped');
-  const prevWeek = getPillValue('pillArmadaWeek');
-
-  const bulanSet = new Set(), expedSet = new Set(), weekSet = new Set();
-  armadaData.forEach(r=>{
-    const bln = (r[colBulan]||'').toString().trim();
-    if(bln) bulanSet.add(bln);
-    const kat = (r[colKat]||'').toString().trim();
-    if(kat) expedSet.add(kat);
-    if(colPlan){
-      const d = parseDate(r[colPlan]);
-      if(d) weekSet.add('W' + getWeekNum(d) + ' (' + d.getFullYear() + ')');
-    }
-  });
-
-  const bulanOrder = ['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
-  fillPills('pillArmadaBulan', [...bulanSet].sort((a,b)=>bulanOrder.indexOf(a)-bulanOrder.indexOf(b)));
-  fillPills('pillArmadaExped', [...expedSet].sort());
-  fillPills('pillArmadaWeek', [...weekSet].sort((a,b)=>{
-    const na=a.match(/W(\d+) \((\d+)\)/), nb=b.match(/W(\d+) \((\d+)\)/);
-    if(na[2]!==nb[2]) return na[2]-nb[2];
-    return na[1]-nb[1];
-  }));
-
-  // restore selection jika masih valid
-  [['pillArmadaBulan',prevBulan,bulanSet],['pillArmadaExped',prevExped,expedSet],['pillArmadaWeek',prevWeek,weekSet]].forEach(([cid,prev,set])=>{
-    if(prev && set.has(prev)){
-      const c = document.getElementById(cid);
-      c.querySelectorAll('.pill').forEach(p=>p.classList.toggle('active', p.dataset.value===prev));
-    }
-  });
-
-  document.getElementById('pillArmadaBulan').style.display = bulanSet.size ? '' : 'none';
-  document.getElementById('pillArmadaExped').style.display = expedSet.size ? '' : 'none';
-  document.getElementById('pillArmadaWeek').style.display = weekSet.size ? '' : 'none';
-}
-
-function getFilteredArmada(){
-  const colBulan = document.getElementById('armadaColBulan').value;
-  const colKat = document.getElementById('armadaColKategori').value;
-  const colPlan = document.getElementById('armadaColPlan').value;
-  const bulanPill = getPillValue('pillArmadaBulan');
-  const expedPill = getPillValue('pillArmadaExped');
-  const weekPill = getPillValue('pillArmadaWeek');
-
-  return armadaData.filter(r=>{
-    if(bulanPill && (r[colBulan]||'').toString().trim() !== bulanPill) return false;
-    if(expedPill && (r[colKat]||'').toString().trim() !== expedPill) return false;
-    if(weekPill && colPlan){
-      const d = parseDate(r[colPlan]);
-      const wk = d ? 'W' + getWeekNum(d) + ' (' + d.getFullYear() + ')' : '';
-      if(wk !== weekPill) return false;
-    }
-    return true;
-  });
-}
-
-/* ===================== PEMENUHAN ARMADA via Kolom AG ===================== */
-function renderArmadaAG(){
-  if(!armadaData.length || armadaFields.length < 33) {
-    document.getElementById('armadaAGCard').style.display = 'none';
-    return;
-  }
-  const colAG = armadaFields[27]; // kolom AB = ke-28 (0-indexed: 27)
-  const colBulan = document.getElementById('armadaColBulan').value;
-  const colKat = document.getElementById('armadaColKategori').value;
-  const colPlan = document.getElementById('armadaColPlan').value;
-
-  const bulanOrder = ['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
-  const BULAN_TO_Q = {
-    'Januari':'Q1','Februari':'Q1','Maret':'Q1',
-    'April':'Q2','Mei':'Q2','Juni':'Q2',
-    'Juli':'Q3','Agustus':'Q3','September':'Q3',
-    'Oktober':'Q4','November':'Q4','Desember':'Q4'
-  };
-
-  const bulanSet = new Set(), expedSet = new Set(), weekSet = new Set();
-  armadaData.forEach(r=>{
-    const bln = (r[colBulan]||'').toString().trim();
-    if(bln) bulanSet.add(bln);
-    const kat = (r[colKat]||'').toString().trim();
-    if(kat) expedSet.add(kat);
-    if(colPlan){
-      const d = parseDate(r[colPlan]);
-      if(d) weekSet.add('W' + getWeekNum(d) + ' (' + d.getFullYear() + ')');
-    }
-  });
-  const prevExped = getPillValue('pillArmadaAGExped');
-  const prevBulan = getPillValue('pillArmadaAGBulan');
-  const prevWeek = getPillValue('pillArmadaAGWeek');
-  fillPills('pillArmadaAGExped', [...expedSet].sort());
-  fillPills('pillArmadaAGBulan', [...bulanSet].sort((a,b)=>bulanOrder.indexOf(a)-bulanOrder.indexOf(b)));
-  fillPills('pillArmadaAGWeek', [...weekSet].sort((a,b)=>{
-    const na=a.match(/W(\d+) \((\d+)\)/), nb=b.match(/W(\d+) \((\d+)\)/);
-    if(na[2]!==nb[2]) return na[2]-nb[2];
-    return na[1]-nb[1];
-  }));
-  [['pillArmadaAGExped',prevExped,expedSet],['pillArmadaAGBulan',prevBulan,bulanSet],['pillArmadaAGWeek',prevWeek,weekSet]].forEach(([cid,prev,set])=>{
-    if(prev && set.has(prev)){
-      document.getElementById(cid).querySelectorAll('.pill').forEach(p=>p.classList.toggle('active', p.dataset.value===prev));
-    }
-  });
-
-  const expedPill = getPillValue('pillArmadaAGExped');
-  const bulanPill = getPillValue('pillArmadaAGBulan');
-  const weekPill = getPillValue('pillArmadaAGWeek');
-  const quartalPill = getPillValue('pillArmadaAGQuartal');
-
-  const filtered = armadaData.filter(r=>{
-    if(expedPill && (r[colKat]||'').toString().trim() !== expedPill) return false;
-    if(bulanPill && (r[colBulan]||'').toString().trim() !== bulanPill) return false;
-    if(quartalPill && BULAN_TO_Q[(r[colBulan]||'').toString().trim()] !== quartalPill) return false;
-    if(weekPill && colPlan){
-      const d = parseDate(r[colPlan]);
-      const wk = d ? 'W' + getWeekNum(d) + ' (' + d.getFullYear() + ')' : '';
-      if(wk !== weekPill) return false;
-    }
-    return true;
-  });
-
-  let total=0, hit=0;
-  const byBulan = {}, byExped = {};
-  filtered.forEach(r=>{
-    const ag = (r[colAG]||'').toString().trim();
-    const isHit = ag === '1';
-    total++;
-    if(isHit) hit++;
-
-    const bln = (r[colBulan]||'-').toString().trim() || '-';
-    if(!byBulan[bln]) byBulan[bln] = {total:0, hit:0};
-    byBulan[bln].total++; if(isHit) byBulan[bln].hit++;
-
-    const exp = (r[colKat]||'Tidak diketahui').toString().trim() || 'Tidak diketahui';
-    if(!byExped[exp]) byExped[exp] = {total:0, hit:0};
-    byExped[exp].total++; if(isHit) byExped[exp].hit++;
-  });
-  const miss = total - hit;
-
-  document.getElementById('armadaAGCard').style.display = '';
-  document.getElementById('armadaAGKpiTotal').textContent = total.toLocaleString('id-ID');
-  document.getElementById('armadaAGKpiHit').textContent = hit.toLocaleString('id-ID');
-  document.getElementById('armadaAGKpiMiss').textContent = miss.toLocaleString('id-ID');
-  document.getElementById('armadaAGKpiPct').textContent = (total? Math.round(hit/total*100):0) + '%';
-
-  function buildAGChart(canvasId, map, order){
-    let labels = Object.keys(map);
-    if(order) labels = order.filter(l=>map[l]).concat(labels.filter(l=>!order.includes(l)));
-    else labels = labels.sort((a,b)=>map[b].total-map[a].total);
-    destroyChart(canvasId);
-    charts[canvasId] = new Chart(document.getElementById(canvasId), {
-      type:'bar',
-      data:{ labels, datasets:[
-        {label:'HIT', data: labels.map(l=>map[l].hit), backgroundColor:'#3f8f5b'},
-        {label:'MISS', data: labels.map(l=>map[l].total-map[l].hit), backgroundColor:'#c1452f'}
-      ]},
-      options:{responsive:true, maintainAspectRatio:false,
-        scales:{x:{stacked:true},y:{stacked:true,beginAtZero:true}},
-        plugins:{legend:{position:'bottom'},
-          datalabels:{color:'#1b2a35', font:{weight:'bold',size:9},
-            formatter:(v,ctx)=>{
-              if(!v) return '';
-              const l = ctx.chart.data.labels[ctx.dataIndex];
-              const t = map[l].total;
-              return v + (t? ' ('+Math.round(v/t*100)+'%)':'');
-            }}}}
-    });
-  }
-  buildAGChart('chartArmadaAGBulan', byBulan, bulanOrder);
-  buildAGChart('chartArmadaAGExped', byExped);
-
-  document.getElementById('armadaAGBody').innerHTML = Object.keys(byBulan).map(b=>{
-    const g = byBulan[b], m = g.total - g.hit, pct = g.total? Math.round(g.hit/g.total*100):0;
-    return `<tr><td><strong>${b}</strong></td><td>${g.total}</td><td><span class="badge hit">${g.hit}</span></td><td><span class="badge miss">${m}</span></td><td>${pct}%</td></tr>`;
-  }).join('') || '<tr><td colspan="5" style="text-align:center;color:var(--muted);padding:16px;">Tidak ada data</td></tr>';
-
-  ['pillArmadaAGExped','pillArmadaAGBulan','pillArmadaAGWeek'].forEach(cid=>{
-    const c = document.getElementById(cid);
-    c.querySelectorAll('.pill').forEach(p=>{
-      p.onclick = ()=>{
-        c.querySelectorAll('.pill').forEach(x=>x.classList.remove('active'));
-        p.classList.add('active');
-        renderArmadaAG();
-      };
-    });
-  });
-}
-
-const pillArmadaAGQuartalEl = document.getElementById('pillArmadaAGQuartal');
-pillArmadaAGQuartalEl.querySelectorAll('.pill').forEach(pill=>{
-  pill.addEventListener('click', ()=>{
-    pillArmadaAGQuartalEl.querySelectorAll('.pill').forEach(p=>p.classList.remove('active'));
-    pill.classList.add('active');
-    if(armadaData.length) renderArmadaAG();
-  });
-});
-
-function renderArmada(){
-  if(!armadaData.length) return;
-  populateArmadaFilters();
-  const armadaDataFiltered = getFilteredArmada();
-  const colBulan = document.getElementById('armadaColBulan').value;
-  const colKat = document.getElementById('armadaColKategori').value;
-  const colReq = document.getElementById('armadaColRequest').value;
-  const colReal = document.getElementById('armadaColRealisasi').value;
-
-  let totalReq = 0, totalReal = 0;
-  const byKat = {}, byBulan = {};
-  armadaDataFiltered.forEach(r=>{
-    const req = toNumber(r[colReq]);
-    const real = toNumber(r[colReal]);
-    totalReq += req; totalReal += real;
-    const kat = (r[colKat]||'Tidak diketahui').toString().trim() || 'Tidak diketahui';
-    const bln = (r[colBulan]||'-').toString().trim() || '-';
-    if(!byKat[kat]) byKat[kat] = {req:0, real:0};
-    byKat[kat].req += req; byKat[kat].real += real;
-    if(!byBulan[bln]) byBulan[bln] = {req:0, real:0};
-    byBulan[bln].req += req; byBulan[bln].real += real;
-  });
-
-  const gap = totalReq - totalReal;
-  const pct = totalReq ? Math.round(totalReal/totalReq*100) : 0;
-  document.getElementById('armadaKpiRequest').textContent = totalReq.toLocaleString('id-ID');
-  document.getElementById('armadaKpiRealisasi').textContent = totalReal.toLocaleString('id-ID');
-  document.getElementById('armadaKpiGap').textContent = gap.toLocaleString('id-ID');
-  document.getElementById('armadaKpiPct').textContent = pct + '%';
-  document.getElementById('armadaKpiRow').style.display = '';
-  document.getElementById('armadaCharts').style.display = '';
-  document.getElementById('armadaTableCard').style.display = '';
-
-  const katLabels = Object.keys(byKat).sort((a,b)=>byKat[b].req-byKat[a].req);
-  destroyChart('armadaCat');
-  charts.armadaCat = new Chart(document.getElementById('chartArmadaCat'), {
-    type:'bar',
-    data:{
-      labels: katLabels,
-      datasets:[
-        {label:'Request', data: katLabels.map(k=>byKat[k].req), backgroundColor:'#3d6a8a'},
-        {label:'Realisasi', data: katLabels.map(k=>byKat[k].real), backgroundColor:'#3f8f5b'}
-      ]
-    },
-    options:{responsive:true, maintainAspectRatio:false,
-      plugins:{legend:{position:'bottom'}, datalabels:{color:'#1b2a35', font:{weight:'bold',size:9}, formatter:v=>v||''}}}
-  });
-
-  const bulanOrder = ['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
-  const bulanLabels = Object.keys(byBulan).sort((a,b)=>{
-    const ia=bulanOrder.indexOf(a), ib=bulanOrder.indexOf(b);
-    if(ia===-1&&ib===-1) return a.localeCompare(b);
-    if(ia===-1) return 1; if(ib===-1) return -1;
-    return ia-ib;
-  });
-  destroyChart('armadaBulan');
-  charts.armadaBulan = new Chart(document.getElementById('chartArmadaBulan'), {
-    type:'line',
-    data:{
-      labels: bulanLabels,
-      datasets:[
-        {label:'Request', data: bulanLabels.map(b=>byBulan[b].req), borderColor:'#3d6a8a', backgroundColor:'#3d6a8a', tension:.3},
-        {label:'Realisasi', data: bulanLabels.map(b=>byBulan[b].real), borderColor:'#3f8f5b', backgroundColor:'#3f8f5b', tension:.3}
-      ]
-    },
-    options:{responsive:true, maintainAspectRatio:false, plugins:{legend:{position:'bottom'}, datalabels:{display:false}}}
-  });
-
-  const head = document.getElementById('armadaHead');
-  const body = document.getElementById('armadaBody');
-  head.innerHTML = armadaFields.map(f=>`<th>${f}</th>`).join('');
-  body.innerHTML = armadaDataFiltered.slice(0,1000).map(r=>'<tr>'+armadaFields.map(f=>`<td>${r[f]||'-'}</td>`).join('')+'</tr>').join('');
-
-  /* ===== HIT/MISS: Datang Pabrik vs Plan (split Darat/Laut) ===== */
-  const colPlan = document.getElementById('armadaColPlan').value;
-  const colDatang = document.getElementById('armadaColDatang').value;
-  const colJenis = document.getElementById('armadaColJenis').value;
-  if(!colPlan || !colDatang || colPlan===colDatang){
-    document.getElementById('armadaKpiRow2').style.display = 'none';
-    document.getElementById('armadaHitMissCharts').style.display = 'none';
-    document.getElementById('armadaHitMissChartsBulan').style.display = 'none';
-    document.getElementById('armadaExpedCharts').style.display = 'none';
-    return;
-  }
-
-  let hitCount=0, missCount=0;
-  const weekMap = { Darat:{}, Laut:{} }, bulanHitMap = { Darat:{}, Laut:{} };
-  const expedMissMap = { Darat:{}, Laut:{} }, expedTotalMap = { Darat:{}, Laut:{} };
-
-  armadaDataFiltered.forEach(r=>{
-    const dPlan = parseDate(r[colPlan]);
-    const dDatang = parseDate(r[colDatang]);
-    if(!dPlan || !dDatang) return;
-    const isHit = dDatang <= dPlan;
-    if(isHit) hitCount++; else missCount++;
-
-    const kat = colJenis ? getDaratLaut(r[colJenis]) : 'Darat';
-
-    const wk = 'W' + getWeekNum(dPlan) + ' (' + dPlan.getFullYear() + ')';
-    if(!weekMap[kat][wk]) weekMap[kat][wk] = {hit:0, miss:0};
-    weekMap[kat][wk][isHit?'hit':'miss']++;
-
-    const bln = (r[colBulan]||'-').toString().trim() || '-';
-    if(!bulanHitMap[kat][bln]) bulanHitMap[kat][bln] = {hit:0, miss:0};
-    bulanHitMap[kat][bln][isHit?'hit':'miss']++;
-
-    const exp = (r[colKat]||'Tidak diketahui').toString().trim() || 'Tidak diketahui';
-    expedTotalMap[kat][exp] = (expedTotalMap[kat][exp]||0) + 1;
-    if(!isHit) expedMissMap[kat][exp] = (expedMissMap[kat][exp]||0) + 1;
-  });
-
-  const totalHM = hitCount + missCount;
-  document.getElementById('armadaKpiHit').textContent = hitCount;
-  document.getElementById('armadaKpiMiss').textContent = missCount;
-  document.getElementById('armadaKpiHitPct').textContent = (totalHM? Math.round(hitCount/totalHM*100):0) + '%';
-  document.getElementById('armadaKpiMissPct').textContent = (totalHM? Math.round(missCount/totalHM*100):0) + '%';
-  document.getElementById('armadaKpiRow2').style.display = '';
-  document.getElementById('armadaHitMissCharts').style.display = '';
-  document.getElementById('armadaHitMissChartsBulan').style.display = '';
-  document.getElementById('armadaExpedCharts').style.display = '';
-
-  function buildWeekChart(canvasId, tbodyId, map){
-    const labels = Object.keys(map).sort((a,b)=>{
-      const na = a.match(/W(\d+) \((\d+)\)/), nb = b.match(/W(\d+) \((\d+)\)/);
-      if(na[2]!==nb[2]) return na[2]-nb[2];
-      return na[1]-nb[1];
-    });
-    destroyChart(canvasId);
-    charts[canvasId] = new Chart(document.getElementById(canvasId), {
-      type:'bar',
-      data:{ labels, datasets:[
-        {label:'HIT', data: labels.map(w=>map[w].hit), backgroundColor:'#3f8f5b'},
-        {label:'MISS', data: labels.map(w=>map[w].miss), backgroundColor:'#c1452f'}
-      ]},
-      options:{responsive:true, maintainAspectRatio:false,
-        scales:{x:{stacked:true},y:{stacked:true,beginAtZero:true}},
-        plugins:{legend:{position:'bottom'}, datalabels:{color:'#1b2a35', font:{weight:'bold',size:9}, formatter:v=>v||''}}}
-    });
-    document.getElementById(tbodyId).innerHTML = labels.map(w=>{
-      const g = map[w], total = g.hit+g.miss, pct = total? Math.round(g.hit/total*100):0;
-      return `<tr><td><strong>${w}</strong></td><td>${total}</td><td><span class="badge hit">${g.hit}</span></td><td><span class="badge miss">${g.miss}</span></td><td>${pct}%</td></tr>`;
-    }).join('') || '<tr><td colspan="5" style="text-align:center;color:var(--muted);padding:16px;">Tidak ada data</td></tr>';
-  }
-  buildWeekChart('chartArmadaWeekDarat', 'armadaWeekDaratBody', weekMap.Darat);
-  buildWeekChart('chartArmadaWeekLaut', 'armadaWeekLautBody', weekMap.Laut);
-
-  function buildBulanChart(canvasId, tbodyId, map){
-    const labels = Object.keys(map).sort((a,b)=>{
-      const ia=bulanOrder.indexOf(a), ib=bulanOrder.indexOf(b);
-      if(ia===-1&&ib===-1) return a.localeCompare(b);
-      if(ia===-1) return 1; if(ib===-1) return -1;
-      return ia-ib;
-    });
-    destroyChart(canvasId);
-    charts[canvasId] = new Chart(document.getElementById(canvasId), {
-      type:'bar',
-      data:{ labels, datasets:[
-        {label:'HIT', data: labels.map(b=>map[b].hit), backgroundColor:'#3f8f5b'},
-        {label:'MISS', data: labels.map(b=>map[b].miss), backgroundColor:'#c1452f'}
-      ]},
-      options:{responsive:true, maintainAspectRatio:false,
-        scales:{x:{stacked:true},y:{stacked:true,beginAtZero:true}},
-        plugins:{legend:{position:'bottom'},
-          datalabels:{
-            color:'#1b2a35', font:{weight:'bold',size:10},
-            formatter:(value,ctx)=>{
-              if(!value) return '';
-              const b = ctx.chart.data.labels[ctx.dataIndex];
-              const total = map[b].hit + map[b].miss;
-              const pct = total ? Math.round(value/total*100) : 0;
-              return value + ' (' + pct + '%)';
-            }
-          }
-        }}
-    });
-    document.getElementById(tbodyId).innerHTML = labels.map(b=>{
-      const g = map[b], total = g.hit+g.miss, pct = total? Math.round(g.hit/total*100):0;
-      return `<tr><td><strong>${b}</strong></td><td>${total}</td><td><span class="badge hit">${g.hit}</span></td><td><span class="badge miss">${g.miss}</span></td><td>${pct}%</td></tr>`;
-    }).join('') || '<tr><td colspan="5" style="text-align:center;color:var(--muted);padding:16px;">Tidak ada data</td></tr>';
-  }
-  buildBulanChart('chartArmadaBulanDarat', 'armadaBulanDaratBody', bulanHitMap.Darat);
-  buildBulanChart('chartArmadaBulanLaut', 'armadaBulanLautBody', bulanHitMap.Laut);
-
-  function buildExpedChart(canvasId, totalMap, missMap){
-    const labels = Object.keys(totalMap).sort((a,b)=>(missMap[b]||0)-(missMap[a]||0));
-    destroyChart(canvasId);
-    charts[canvasId] = new Chart(document.getElementById(canvasId), {
-      type:'bar',
-      data:{ labels, datasets:[
-        {label:'Total Pengiriman', data: labels.map(e=>totalMap[e]), backgroundColor:'#9fb3c0'},
-        {label:'MISS', data: labels.map(e=>missMap[e]||0), backgroundColor:'#c1452f'}
-      ]},
-      options:{responsive:true, maintainAspectRatio:false,
-        plugins:{legend:{position:'bottom'},
-          datalabels:{
-            color:'#1b2a35', font:{weight:'bold',size:9},
-            formatter:(value,ctx)=>{
-              if(!value) return '';
-              if(ctx.datasetIndex===1){
-                const e = ctx.chart.data.labels[ctx.dataIndex];
-                const total = totalMap[e];
-                const pct = total ? Math.round(value/total*100) : 0;
-                return value + ' (' + pct + '%)';
-              }
-              return value;
-            }
-          }
-        }}
-    });
-  }
-  buildExpedChart('chartArmadaExpedDarat', expedTotalMap.Darat, expedMissMap.Darat);
-  buildExpedChart('chartArmadaExpedLaut', expedTotalMap.Laut, expedMissMap.Laut);
-}
-
 /* ===================== TRANSPORT COST ===================== */
 let costData = [], costFields = [];
 function loadCost(){
@@ -2780,18 +2187,17 @@ function loadCost(){
   if(!url){ alert('Masukkan link CSV publish dulu.'); return; }
   genericLoad(url, document.getElementById('costSkip'),
     (data, fields)=>{
-      costData = data; costFields = fields;
-      document.getElementById('costSync').textContent = 'Tersambung — ' + data.length + ' baris · update ' + new Date().toLocaleTimeString('id-ID');
+      costData = data.filter(r => Object.values(r).some(v => v && String(v).trim() !== ''));
+      costFields = fields;
+      document.getElementById('costSync').textContent = 'Tersambung — ' + costData.length + ' baris · update ' + new Date().toLocaleTimeString('id-ID');
       document.getElementById('costMapping').style.display = 'flex';
-      fillMappingSelect('costColBulan', fields, ['bulan','month']);
-      fillMappingSelect('costColKategori', fields, ['expedition','ekspedisi','region','vehicle','kategori']);
-      fillMappingSelect('costColBudget', fields, ['budget','anggaran','rencana']);
-      fillMappingSelect('costColActual', fields, ['actual','aktual','realisasi']);
-      fillMappingSelect('costColVehicle', fields, ['vehicle','jenis','armada','kontener','truck']);
-      fillMappingSelect('costColM3', fields, ['m3','kubik','volume']);
+      fillMappingSelect('costColBulan', fields, ['bulan','month','delivery date','date']);
+      fillMappingSelect('costColKategori', fields, ['expedition','ekspedisi','region','kategori']);
+      fillMappingSelect('costColVehicle', fields, ['vehicle','jenis','armada','type']);
+      fillMappingSelect('costColM3', fields, ['qty m3','qty sj m3','m3','kubik','volume']);
+      fillMappingSelect('costColActual', fields, ['price exp','price','total cost','cost','rp']);
+      fillMappingSelect('costColRate', fields, ['rp/m','rp/m³','rate','rp per']);
       renderCost();
-      if(armadaMissData.length) renderArmadaPemenuhan();
-      renderArmadaPemenuhan();
     },
     (msg)=>{ document.getElementById('costSync').textContent = msg; }
   );
@@ -2801,50 +2207,56 @@ function renderCost(){
   if(!costData.length) return;
   const colBulan = document.getElementById('costColBulan').value;
   const colKat = document.getElementById('costColKategori').value;
-  const colBudget = document.getElementById('costColBudget').value;
   const colActual = document.getElementById('costColActual').value;
+  const colM3 = document.getElementById('costColM3').value;
+  const colRate = document.getElementById('costColRate').value;
+  const colVehicle = document.getElementById('costColVehicle').value;
 
-  let totalBudget = 0, totalActual = 0;
+  let totalCost = 0, totalM3 = 0;
   const byKat = {}, byBulan = {};
+  const bulanOrder = ['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
+
   costData.forEach(r=>{
-    const b = toNumber(r[colBudget]);
-    const a = toNumber(r[colActual]);
-    totalBudget += b; totalActual += a;
-    const kat = (r[colKat]||'Tidak diketahui').toString().trim() || 'Tidak diketahui';
-    const bln = (r[colBulan]||'-').toString().trim() || '-';
-    if(!byKat[kat]) byKat[kat] = {budget:0, actual:0};
-    byKat[kat].budget += b; byKat[kat].actual += a;
-    if(!byBulan[bln]) byBulan[bln] = {budget:0, actual:0};
-    byBulan[bln].budget += b; byBulan[bln].actual += a;
+    const cost = toNumber(r[colActual]);
+    const m3 = toNumber(r[colM3]);
+    totalCost += cost; totalM3 += m3;
+    let kat = (r[colKat]||'Tidak diketahui').toString().trim() || 'Tidak diketahui';
+    let bln = (r[colBulan]||'-').toString().trim() || '-';
+    const dB = parseDate(bln); if(dB){ const m=dB.toLocaleDateString('id-ID',{month:'long'}); bln=m.charAt(0).toUpperCase()+m.slice(1); }
+    if(!byKat[kat]) byKat[kat] = {cost:0, m3:0};
+    byKat[kat].cost += cost; byKat[kat].m3 += m3;
+    if(!byBulan[bln]) byBulan[bln] = {cost:0, m3:0};
+    byBulan[bln].cost += cost; byBulan[bln].m3 += m3;
   });
 
-  const selisih = totalActual - totalBudget;
-  const selisihPct = totalBudget ? Math.round(selisih/totalBudget*100) : 0;
-  document.getElementById('costKpiBudget').textContent = fmtRupiah(totalBudget);
-  document.getElementById('costKpiActual').textContent = fmtRupiah(totalActual);
-  document.getElementById('costKpiSelisih').textContent = fmtRupiah(selisih);
-  document.getElementById('costKpiSelisihPct').textContent = (selisih>=0?'+':'') + selisihPct + '% dari budget';
-  document.getElementById('costKpiSelisihCard').className = 'kpi ' + (selisih > 0 ? 'red' : 'green');
+  const avgRate = totalM3 ? totalCost/totalM3 : 0;
+  document.getElementById('costKpiActual').textContent = fmtRupiah(totalCost);
+  document.getElementById('costKpiM3').textContent = totalM3.toLocaleString('id-ID',{maximumFractionDigits:1});
+  document.getElementById('costKpiRate').textContent = fmtRupiah(avgRate) + '/M³';
+
+  // Target gabungan tertimbang (Kontener 339.336, Truck 154.299 — pakai rata2 sebagai acuan jika campur)
+  // Tampilkan apakah avg rate di bawah/atas target rata-rata
+  document.getElementById('costKpiSelisih').textContent = fmtRupiah(avgRate) + '/M³';
+  document.getElementById('costKpiSelisihPct').textContent = 'Total ' + totalM3.toLocaleString('id-ID',{maximumFractionDigits:1}) + ' M³';
+  document.getElementById('costKpiSelisihCard').className = 'kpi green';
+
   document.getElementById('costKpiRow').style.display = '';
   document.getElementById('costCharts').style.display = '';
   document.getElementById('costTableCard').style.display = '';
 
-  const katLabels = Object.keys(byKat).sort((a,b)=>byKat[b].budget-byKat[a].budget);
+  // chart rate per ekspedisi
+  const katLabels = Object.keys(byKat).sort((a,b)=>(byKat[b].cost/(byKat[b].m3||1))-(byKat[a].cost/(byKat[a].m3||1)));
   destroyChart('costCat');
   charts.costCat = new Chart(document.getElementById('chartCostCat'), {
     type:'bar',
-    data:{
-      labels: katLabels,
-      datasets:[
-        {label:'Budget', data: katLabels.map(k=>byKat[k].budget), backgroundColor:'#3d6a8a'},
-        {label:'Actual', data: katLabels.map(k=>byKat[k].actual), backgroundColor:'#e0732a'}
-      ]
-    },
+    data:{ labels: katLabels, datasets:[
+      {label:'Rate Rp/M³', data: katLabels.map(k=>byKat[k].m3? Math.round(byKat[k].cost/byKat[k].m3):0), backgroundColor:'#e0732a'}
+    ]},
     options:{responsive:true, maintainAspectRatio:false,
-      plugins:{legend:{position:'bottom'}, datalabels:{color:'#1b2a35', font:{weight:'bold',size:9}, formatter:v=> v? Math.round(v).toLocaleString('id-ID') : ''}}}
+      plugins:{legend:{display:false}, datalabels:{color:'#1b2a35', font:{weight:'bold',size:9}, formatter:v=> v? Math.round(v).toLocaleString('id-ID') : ''}}}
   });
 
-  const bulanOrder = ['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
+  // chart rate per bulan
   const bulanLabels = Object.keys(byBulan).sort((a,b)=>{
     const ia=bulanOrder.indexOf(a), ib=bulanOrder.indexOf(b);
     if(ia===-1&&ib===-1) return a.localeCompare(b);
@@ -2854,176 +2266,384 @@ function renderCost(){
   destroyChart('costBulan');
   charts.costBulan = new Chart(document.getElementById('chartCostBulan'), {
     type:'line',
-    data:{
-      labels: bulanLabels,
-      datasets:[
-        {label:'Budget', data: bulanLabels.map(b=>byBulan[b].budget), borderColor:'#3d6a8a', backgroundColor:'#3d6a8a', tension:.3},
-        {label:'Actual', data: bulanLabels.map(b=>byBulan[b].actual), borderColor:'#e0732a', backgroundColor:'#e0732a', tension:.3}
-      ]
-    },
-    options:{responsive:true, maintainAspectRatio:false, plugins:{legend:{position:'bottom'}, datalabels:{display:false}}}
+    data:{ labels: bulanLabels, datasets:[
+      {label:'Rate Rp/M³', data: bulanLabels.map(b=>byBulan[b].m3? Math.round(byBulan[b].cost/byBulan[b].m3):0), borderColor:'#e0732a', backgroundColor:'#e0732a', tension:.3}
+    ]},
+    options:{responsive:true, maintainAspectRatio:false, plugins:{legend:{position:'bottom'},
+      datalabels:{color:'#1b2a35', font:{weight:'bold',size:9}, formatter:v=> v? Math.round(v).toLocaleString('id-ID') : ''}}}
   });
 
-  const head = document.getElementById('costHead');
-  const body = document.getElementById('costBody');
-  head.innerHTML = costFields.map(f=>`<th>${f}</th>`).join('');
-  body.innerHTML = costData.slice(0,1000).map(r=>'<tr>'+costFields.map(f=>`<td>${r[f]||'-'}</td>`).join('')+'</tr>').join('');
-
-  /* ===== Cost Ratio per M3 vs Target ===== */
-  const colVehicle = document.getElementById('costColVehicle').value;
-  const colM3 = document.getElementById('costColM3').value;
-  const ratioBody = document.getElementById('costRatioBody');
-
-  if(!colVehicle || !colM3){
+  // Cost Ratio per M3 vs Target (Kontener/Truck)
+  if(colVehicle && colM3){
+    const TARGET = { 'kontener': { rpM3: 339336, pct: 4.35 }, 'truck': { rpM3: 154299, pct: 2.32 } };
+    const vehMap = {};
+    costData.forEach(r=>{
+      const veh = (r[colVehicle]||'Tidak diketahui').toString().trim() || 'Tidak diketahui';
+      if(!vehMap[veh]) vehMap[veh] = {m3:0, cost:0};
+      vehMap[veh].m3 += toNumber(r[colM3]);
+      vehMap[veh].cost += toNumber(r[colActual]);
+    });
+    const grandCost = Object.values(vehMap).reduce((s,v)=>s+v.cost,0);
+    document.getElementById('costRatioBody').innerHTML = Object.keys(vehMap).map(veh=>{
+      const v = vehMap[veh];
+      const actualRpM3 = v.m3 ? v.cost / v.m3 : 0;
+      const actualPct = grandCost ? (v.cost/grandCost*100) : 0;
+      const keyLower = veh.toLowerCase();
+      let target = null;
+      for(const k in TARGET){ if(keyLower.includes(k) || (k==='kontener'&&(keyLower.includes('kontain')||keyLower.includes('container')))) { target = TARGET[k]; break; } }
+      const targetRpM3 = target ? target.rpM3 : 0;
+      const selisih = actualRpM3 - targetRpM3;
+      const col = target ? (selisih>0 ? 'var(--red)' : 'var(--green)') : 'var(--muted)';
+      return `<tr><td><strong>${veh}</strong></td><td>${v.m3.toLocaleString('id-ID',{maximumFractionDigits:1})}</td><td>${fmtRupiah(v.cost)}</td><td>${fmtRupiah(actualRpM3)}</td><td>${target?fmtRupiah(targetRpM3):'-'}</td><td style="color:${col};font-weight:600;">${target?fmtRupiah(selisih):'-'}</td><td>${actualPct.toFixed(2)}%</td><td>${target?target.pct.toFixed(2)+'%':'-'}</td></tr>`;
+    }).join('');
+    document.getElementById('costRatioCard').style.display = '';
+  } else {
     document.getElementById('costRatioCard').style.display = 'none';
-    return;
   }
 
-  const TARGET = {
-    'kontener': { rpM3: 339336, pct: 4.35 },
-    'truck':    { rpM3: 154299, pct: 2.32 }
-  };
-
-  const vehMap = {}; // vehicle -> {m3, actual}
-  costData.forEach(r=>{
-    const veh = (r[colVehicle]||'Tidak diketahui').toString().trim() || 'Tidak diketahui';
-    const m3 = toNumber(r[colM3]);
-    const act = toNumber(r[colActual]);
-    if(!vehMap[veh]) vehMap[veh] = {m3:0, actual:0};
-    vehMap[veh].m3 += m3;
-    vehMap[veh].actual += act;
-  });
-
-  const grandActual = Object.values(vehMap).reduce((s,v)=>s+v.actual,0);
-
-  ratioBody.innerHTML = Object.keys(vehMap).map(veh=>{
-    const v = vehMap[veh];
-    const actualRpM3 = v.m3 ? v.actual / v.m3 : 0;
-    const actualPct = grandActual ? (v.actual/grandActual*100) : 0;
-    const keyLower = veh.toLowerCase();
-    let target = null;
-    for(const k in TARGET){ if(keyLower.includes(k)) { target = TARGET[k]; break; } }
-    const targetRpM3 = target ? target.rpM3 : 0;
-    const targetPct = target ? target.pct : 0;
-    const selisih = actualRpM3 - targetRpM3;
-    const selisihColor = target ? (selisih>0 ? 'var(--red)' : 'var(--green)') : 'var(--muted)';
-    return `<tr>
-      <td><strong>${veh}</strong></td>
-      <td>${v.m3.toLocaleString('id-ID')}</td>
-      <td>${fmtRupiah(v.actual)}</td>
-      <td>${fmtRupiah(actualRpM3)}</td>
-      <td>${target ? fmtRupiah(targetRpM3) : '-'}</td>
-      <td style="color:${selisihColor};font-weight:600;">${target ? fmtRupiah(selisih) : '-'}</td>
-      <td>${actualPct.toFixed(2)}%</td>
-      <td>${target ? targetPct.toFixed(2)+'%' : '-'}</td>
-    </tr>`;
-  }).join('');
-  document.getElementById('costRatioCard').style.display = '';
+  document.getElementById('costHead').innerHTML = costFields.map(f=>`<th>${f}</th>`).join('');
+  document.getElementById('costBody').innerHTML = costData.slice(0,1000).map(r=>'<tr>'+costFields.map(f=>`<td>${r[f]||'-'}</td>`).join('')+'</tr>').join('');
 }
 
-/* ===================== MISS ARMADA + PEMENUHAN (gabungan dgn Cost) ===================== */
-let armadaMissData = [], armadaMissFields = [];
-function loadArmadaMiss(){
-  const url = document.getElementById('armadaMissUrl').value.trim();
-  if(!url){ alert('Masukkan link CSV publish dulu.'); return; }
-  genericLoad(url, document.getElementById('armadaMissSkip'),
+/* ===================== PEMENUHAN ARMADA (HIT kolom AA + MISS sheet) ===================== */
+let pemHitData = [], pemHitFields = [];
+let pemMissData = [], pemMissFields = [];
+
+function loadArmadaAll(){
+  const hitUrl = document.getElementById('armadaHitUrl').value.trim();
+  const missUrl = document.getElementById('armadaMissUrl').value.trim();
+  if(!hitUrl){ alert('Masukkan link CSV HIT dulu.'); return; }
+  document.getElementById('armadaAllSync').textContent = 'Memuat HIT...';
+  genericLoad(hitUrl, document.getElementById('armadaHitSkip'),
     (data, fields)=>{
-      armadaMissData = data; armadaMissFields = fields;
-      document.getElementById('armadaMissSync').textContent = 'Tersambung — ' + data.length + ' baris · update ' + new Date().toLocaleTimeString('id-ID');
-      document.getElementById('armadaMissMapping').style.display = 'flex';
-      fillMappingSelect('armadaMissColBulan', fields, ['bulan','month']);
-      fillMappingSelect('armadaMissColKategori', fields, ['expedition','ekspedisi','kategori','vehicle']);
-      fillMappingSelect('armadaMissColJumlah', fields, ['miss','jumlah','qty','unit']);
-      renderArmadaPemenuhan();
+      pemHitData = data; pemHitFields = fields;
+      document.getElementById('armadaAllSync').textContent = 'HIT ' + data.length + ' baris, memuat MISS...';
+      // isi dropdown
+      ['pemColHit','pemColBulan','pemColDate','pemColExped','pemColJenis'].forEach(id=>{
+        document.getElementById(id).innerHTML = fields.map(f=>`<option value="${f}">${f}</option>`).join('');
+      });
+      // Mapping default dikunci sesuai struktur sheet HIT (header kosong → _N):
+      // _26 = HIT (angka 1), _28 = Bulan, _24 = Tanggal, _2 = Expedition Code, Vehicle Type utk jenis
+      const setIf = (id, val)=>{ const s=document.getElementById(id); if([...s.options].some(o=>o.value===val)) s.value=val; };
+
+      // coba kunci ke kolom spesifik dulu
+      setIf('pemColHit', '_26');
+      setIf('pemColBulan', '_28');
+      setIf('pemColDate', '_24');
+      setIf('pemColExped', '_2');
+
+      // fallback by header name jika _N tidak ada
+      if(document.getElementById('pemColHit').value !== '_26'){
+        let hitIdx = fields.findIndex(f => f.toLowerCase().trim() === 'hit');
+        const hitCol = (hitIdx !== -1 && hitIdx+1 < fields.length) ? fields[hitIdx+1] : fields[0];
+        if(hitCol) document.getElementById('pemColHit').value = hitCol;
+      }
+      if(document.getElementById('pemColBulan').value !== '_28'){
+        const bulanCol = fields.find(f => f.toLowerCase().trim() === 'bulan') || fields.find(f=>f.toLowerCase().includes('bulan'));
+        if(bulanCol) document.getElementById('pemColBulan').value = bulanCol;
+      }
+      if(document.getElementById('pemColExped').value !== '_2'){
+        const expedCol = fields.find(f => f.toLowerCase().includes('expedition'));
+        if(expedCol) document.getElementById('pemColExped').value = expedCol;
+      }
+      const jenisCol = fields.find(f => f.toLowerCase().includes('vehicle')) || fields.find(f=>f.toLowerCase().includes('jenis')) || fields.find(f=>f.toLowerCase().includes('type')) || '';
+      if(jenisCol) document.getElementById('pemColJenis').value = jenisCol;
+      if(missUrl){
+        genericLoad(missUrl, document.getElementById('armadaMissSkip'),
+          (d2, f2)=>{
+            pemMissData = d2; pemMissFields = f2;
+            // Sheet miss tanpa header asli: baris pertama terbaca jadi nama kolom.
+            // Nilai asli baris itu = nama field itu sendiri (f2[i]). Rekonstruksi:
+            if(f2[0] && /januari|februari|maret|april|mei|juni|juli|agustus|september|oktober|november|desember/i.test(f2[0])){
+              const firstRow = {};
+              f2.forEach((f)=>{ firstRow[f] = f; });
+              pemMissData = [firstRow, ...d2];
+            }
+            console.log('MISS total baris:', pemMissData.length);
+            document.getElementById('armadaAllSync').textContent = 'Tersambung — HIT ' + data.length + ', MISS ' + d2.length + ' baris · ' + new Date().toLocaleTimeString('id-ID');
+            populatePemPills(); renderPemenuhan();
+          },
+          (msg)=>{ document.getElementById('armadaAllSync').textContent = 'MISS gagal: '+msg; populatePemPills(); renderPemenuhan(); }
+        );
+      } else {
+        populatePemPills(); renderPemenuhan();
+      }
     },
-    (msg)=>{ document.getElementById('armadaMissSync').textContent = msg; }
+    (msg)=>{ document.getElementById('armadaAllSync').textContent = 'HIT gagal: '+msg; }
   );
 }
 
-function renderArmadaPemenuhan(){
-  if(!costData.length) return;
+function autoPickHitColumn(data, fields){
+  // Strategi 1: cari kolom tepat setelah kolom berheader "hit"
+  let hitHeaderIdx = fields.findIndex(f => f.toLowerCase().trim() === 'hit');
+  let candidate = null;
+  if(hitHeaderIdx !== -1 && hitHeaderIdx+1 < fields.length){
+    candidate = fields[hitHeaderIdx+1];
+  }
 
-  const bulanOrder = ['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
-  const BULAN_TO_Q = {
-    'Januari':'Q1','Februari':'Q1','Maret':'Q1',
-    'April':'Q2','Mei':'Q2','Juni':'Q2',
-    'Juli':'Q3','Agustus':'Q3','September':'Q3',
-    'Oktober':'Q4','November':'Q4','Desember':'Q4'
-  };
-
-  // Nama kolom tetap sesuai header: Expedition Code, Delivery Date, Customer Name, Vehicle Type
-  const totalHit = costData.length;
-  const totalMiss = armadaMissData.length || 0;
-  const grandTotal = totalHit + totalMiss;
-
-  document.getElementById('pemenuhanKpiHit').textContent = totalHit.toLocaleString('id-ID');
-  document.getElementById('pemenuhanKpiMiss').textContent = totalMiss.toLocaleString('id-ID');
-  document.getElementById('pemenuhanKpiTotal').textContent = grandTotal.toLocaleString('id-ID');
-  document.getElementById('pemenuhanKpiPct').textContent = (grandTotal? Math.round(totalHit/grandTotal*100):0) + '%';
-  document.getElementById('armadaPemenuhanCard').style.display = '';
-
-  // Group per bulan (dari Delivery Date) dan per Ekspedisi
-  const byBulan = {}, byExped = {};
-  costData.forEach(r=>{
-    if(!(r['Expedition Code']||'').trim() && !(r['Delivery Date']||'').trim()) return; // skip baris kosong
-    const delDate = parseDate(r['Delivery Date']);
-    const monthName = delDate ? delDate.toLocaleDateString('id-ID',{month:'long'}) : '-';
-    const bln = monthName.charAt(0).toUpperCase() + monthName.slice(1);
-    if(!byBulan[bln]) byBulan[bln] = 0;
-    byBulan[bln]++;
-
-    const exp = (r['Expedition Code']||'Tidak diketahui').toString().trim() || 'Tidak diketahui';
-    if(!byExped[exp]) byExped[exp] = 0;
-    byExped[exp]++;
+  // Strategi 2: cari kolom yang RASIO nilai==1 paling tinggi (bukan jumlah absolut)
+  let bestCol = null, bestRatio = -1;
+  fields.forEach(f=>{
+    let count1=0, countFilled=0;
+    data.slice(0,300).forEach(r=>{
+      const raw=(r[f]||'').toString().trim();
+      if(raw==='') return;
+      countFilled++;
+      const v=toNumber(r[f]);
+      if(Math.abs(v-1)<0.01) count1++;
+    });
+    if(countFilled>=5){
+      const ratio = count1/countFilled;
+      if(ratio>bestRatio){ bestRatio=ratio; bestCol=f; }
+    }
   });
 
-  const bulanLabels = Object.keys(byBulan).sort((a,b)=>{
-    const ia=bulanOrder.indexOf(a), ib=bulanOrder.indexOf(b);
-    if(ia===-1&&ib===-1) return a.localeCompare(b);
-    if(ia===-1) return 1; if(ib===-1) return -1;
-    return ia-ib;
-  });
-  destroyChart('pemenuhanBulan');
-  charts.pemenuhanBulan = new Chart(document.getElementById('chartPemenuhanBulan'), {
-    type:'bar',
-    data:{ labels: bulanLabels, datasets:[
-      {label:'Total Pengiriman', data: bulanLabels.map(b=>byBulan[b]), backgroundColor:'#3f8f5b'}
-    ]},
-    options:{responsive:true, maintainAspectRatio:false,
-      plugins:{legend:{position:'bottom'},
-        datalabels:{color:'#1b2a35', font:{weight:'bold',size:10}, formatter:v=>v||''}}}
-  });
+  // Prioritaskan candidate (setelah header hit) jika valid, else bestCol
+  let chosen = null;
+  if(candidate){
+    let c1=0,cf=0;
+    data.slice(0,300).forEach(r=>{ const raw=(r[candidate]||'').toString().trim(); if(raw){cf++; if(Math.abs(toNumber(r[candidate])-1)<0.01)c1++;} });
+    if(cf>=5 && c1/cf>0.7) chosen = candidate;
+  }
+  if(!chosen && bestRatio>0.7) chosen = bestCol;
 
-  const expedLabels = Object.keys(byExped).sort((a,b)=>byExped[b]-byExped[a]);
-  destroyChart('pemenuhanExped');
-  charts.pemenuhanExped = new Chart(document.getElementById('chartPemenuhanExped'), {
-    type:'bar',
-    data:{ labels: expedLabels, datasets:[
-      {label:'Jumlah Pengiriman', data: expedLabels.map(e=>byExped[e]), backgroundColor:'#3d6a8a'}
-    ]},
-    options:{responsive:true, maintainAspectRatio:false,
-      plugins:{legend:{position:'bottom'},
-        datalabels:{color:'#1b2a35', font:{weight:'bold',size:9}, formatter:v=>v||''}}}
-  });
-
-  // Tabel ringkas: Delivery Date, Ekspedisi, Customer Name, Vehicle Type
-  const costDataValid = costData.filter(r=>
-    (r['Expedition Code']||'').trim() || (r['Delivery Date']||'').trim() || (r['Customer Name']||'').trim()
-  );
-  document.getElementById('pemenuhanBody').innerHTML = costDataValid.slice(0,1000).map(r=>`<tr>
-    <td>${r['Delivery Date']||'-'}</td>
-    <td>${r['Expedition Code']||'-'}</td>
-    <td>${r['Customer Name']||'-'}</td>
-    <td>${r['Vehicle Type']||'-'}</td>
-    <td>${r['Ship Point']||'-'}</td>
-    <td>${r['Province']||'-'}</td>
-    <td>${r['Qty M3']||'-'}</td>
-    <td>${r['Rp/M³']||'-'}</td>
-    <td>${r['Act Cost ratio %']||'-'}</td>
-    <td>${r['Target Cost ratio %']||'-'}</td>
-    <td>${r['TYPE']||'-'}</td>
-  </tr>`).join('') || '<tr><td colspan="11" style="text-align:center;color:var(--muted);padding:16px;">Tidak ada data</td></tr>';
+  if(chosen){
+    const sel=document.getElementById('pemColHit');
+    if([...sel.options].some(o=>o.value===chosen)) sel.value=chosen;
+  }
 }
+
+function pemBulanFromRow(r){
+  const col = document.getElementById('pemColBulan').value;
+  if(col){
+    const v = (r[col]||'').toString().trim();
+    if(v){
+      // jika isinya tanggal, konversi ke nama bulan
+      const d = parseDate(v);
+      if(d){ const m=d.toLocaleDateString('id-ID',{month:'long'}); return m.charAt(0).toUpperCase()+m.slice(1); }
+      return v;
+    }
+  }
+  const cd = document.getElementById('pemColDate').value;
+  if(cd){ const d=parseDate(r[cd]); if(d){const m=d.toLocaleDateString('id-ID',{month:'long'}); return m.charAt(0).toUpperCase()+m.slice(1);} }
+  return '-';
+}
+function pemDateFromRow(r){
+  const cd = document.getElementById('pemColDate').value;
+  if(cd){ const d=parseDate(r[cd]); if(d) return d; }
+  return null;
+}
+function pemExpedFromRow(r){
+  const col = document.getElementById('pemColExped').value;
+  if(col){ const v=(r[col]||'').toString().trim(); if(v) return v; }
+  return 'Tidak diketahui';
+}
+function pemJenisFromRow(r){
+  const col = document.getElementById('pemColJenis').value;
+  if(!col) return 'Darat';
+  const v = (r[col]||'').toString().toLowerCase();
+  if(v.includes('konten') || v.includes('kontain') || v.includes('container') || v.includes('laut')) return 'Laut';
+  return 'Darat';
+}
+function pemMissBulan(r){
+  // sheet miss tanpa header asli; kolom 0 = bulan
+  if(pemMissFields.length){
+    const v = (r[pemMissFields[0]]||'').toString().trim();
+    if(v){
+      const d = parseDate(v);
+      if(d){ const m=d.toLocaleDateString('id-ID',{month:'long'}); return m.charAt(0).toUpperCase()+m.slice(1); }
+      return v;
+    }
+  }
+  return '-';
+}
+function pemMissExped(r){
+  // kolom index 7 = kode ekspedisi (SPA, dll)
+  if(pemMissFields.length > 7){
+    const v = (r[pemMissFields[7]]||'').toString().trim();
+    if(v) return v;
+  }
+  return 'Tidak diketahui';
+}
+function pemMissJenis(r){
+  // kolom index 9 = Darat/Laut
+  if(pemMissFields.length > 9){
+    const v = (r[pemMissFields[9]]||'').toString().toLowerCase();
+    if(v.includes('konten')||v.includes('kontain')||v.includes('container')||v.includes('laut')) return 'Laut';
+    if(v) return 'Darat';
+  }
+  return 'Darat';
+}
+function pemMissWeek(r){
+  // kolom L = index 11 (berisi tanggal/week)
+  if(pemMissFields.length > 11){
+    const raw = (r[pemMissFields[11]]||'').toString().trim();
+    if(raw){
+      const d = parseDate(raw);
+      if(d) return 'W'+getWeekNum(d)+' ('+d.getFullYear()+')';
+      // kalau isinya angka week langsung
+      const num = parseInt(raw);
+      if(!isNaN(num)) return 'W'+num;
+      return raw;
+    }
+  }
+  return null;
+}
+
+const BULAN_ORDER = ['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
+const BULAN_Q = {'Januari':'Q1','Februari':'Q1','Maret':'Q1','April':'Q2','Mei':'Q2','Juni':'Q2','Juli':'Q3','Agustus':'Q3','September':'Q3','Oktober':'Q4','November':'Q4','Desember':'Q4'};
+
+function populatePemPills(){
+  const expedSet=new Set(), bulanSet=new Set(), weekSet=new Set();
+  pemHitData.forEach(r=>{
+    const e=pemExpedFromRow(r); if(e&&e!=='Tidak diketahui') expedSet.add(e);
+    const b=pemBulanFromRow(r); if(b&&b!=='-') bulanSet.add(b);
+    const d=pemDateFromRow(r); if(d) weekSet.add('W'+getWeekNum(d)+' ('+d.getFullYear()+')');
+  });
+  fillPills('pillPemExped',[...expedSet].sort());
+  fillPills('pillPemBulan',[...bulanSet].sort((a,b)=>BULAN_ORDER.indexOf(a)-BULAN_ORDER.indexOf(b)));
+  fillPills('pillPemWeek',[...weekSet].sort((a,b)=>{const na=a.match(/W(\d+) \((\d+)\)/),nb=b.match(/W(\d+) \((\d+)\)/); if(na&&nb){if(na[2]!==nb[2])return na[2]-nb[2]; return na[1]-nb[1];} return 0;}));
+}
+
+function renderPemenuhan(){
+  if(!pemHitData.length) return;
+  document.getElementById('pemenuhanCard').style.display = '';
+
+  const colAA = document.getElementById('pemColHit').value;
+
+  const fE=getPillValue('pillPemExped'), fB=getPillValue('pillPemBulan'), fW=getPillValue('pillPemWeek'), fQ=getPillValue('pillPemQuartal');
+
+  function matchFilter(bln, exp, d){
+    if(fE && exp!==fE) return false;
+    if(fB && bln!==fB) return false;
+    if(fQ && BULAN_Q[bln]!==fQ) return false;
+    if(fW){ const wk = d? 'W'+getWeekNum(d)+' ('+d.getFullYear()+')':''; if(wk!==fW) return false; }
+    return true;
+  }
+
+  // Agregasi dengan split Jenis (Darat/Laut)
+  // struktur: hitBulan[jenis][bln], hitExped[jenis][exp], hitWeek[wk]
+  const hitBulan={Darat:{},Laut:{}}, hitExped={Darat:{},Laut:{}}, hitWeek={};
+  const missBulan={Darat:{},Laut:{}}, missExped={Darat:{},Laut:{}};
+  let totalHit=0, totalMiss=0;
+
+  pemHitData.forEach(r=>{
+    const bln=pemBulanFromRow(r), exp=pemExpedFromRow(r), d=pemDateFromRow(r), jenis=pemJenisFromRow(r);
+    if(!matchFilter(bln,exp,d)) return;
+    const val = toNumber(r[colAA]);
+    totalHit += val;
+    hitBulan[jenis][bln]=(hitBulan[jenis][bln]||0)+val;
+    hitExped[jenis][exp]=(hitExped[jenis][exp]||0)+val;
+    if(d){ const wk='W'+getWeekNum(d)+' ('+d.getFullYear()+')'; hitWeek[wk]=(hitWeek[wk]||0)+val; }
+  });
+
+  const missWeek={};
+  pemMissData.forEach(r=>{
+    const bln=pemMissBulan(r), exp=pemMissExped(r), jenis=pemMissJenis(r);
+    if(fE && exp!==fE) return;
+    if(fB && bln!==fB) return;
+    if(fQ && BULAN_Q[bln]!==fQ) return;
+    totalMiss += 1;
+    missBulan[jenis][bln]=(missBulan[jenis][bln]||0)+1;
+    missExped[jenis][exp]=(missExped[jenis][exp]||0)+1;
+    const wk = pemMissWeek(r);
+    if(wk){ missWeek[wk]=(missWeek[wk]||0)+1; }
+  });
+
+  const plan = totalHit + totalMiss;
+  document.getElementById('pemKpiPlan').textContent = plan.toLocaleString('id-ID');
+  document.getElementById('pemKpiHit').textContent = totalHit.toLocaleString('id-ID');
+  document.getElementById('pemKpiMiss').textContent = totalMiss.toLocaleString('id-ID');
+  document.getElementById('pemKpiPct').textContent = (plan? Math.round(totalHit/plan*100):0)+'%';
+
+  // Chart per bulan (Hit/Miss/% stacked) untuk satu jenis
+  function buildBulanChart(canvasId, hitMap, missMap){
+    const allBulan=[...new Set([...Object.keys(hitMap),...Object.keys(missMap)])].sort((a,b)=>{
+      const ia=BULAN_ORDER.indexOf(a),ib=BULAN_ORDER.indexOf(b);
+      if(ia===-1&&ib===-1)return a.localeCompare(b); if(ia===-1)return 1; if(ib===-1)return -1; return ia-ib;
+    });
+    destroyChart(canvasId);
+    charts[canvasId]=new Chart(document.getElementById(canvasId),{type:'bar',
+      data:{labels:allBulan,datasets:[
+        {label:'Hit',data:allBulan.map(b=>hitMap[b]||0),backgroundColor:'#3f8f5b'},
+        {label:'Miss',data:allBulan.map(b=>missMap[b]||0),backgroundColor:'#c1452f'}
+      ]},
+      options:{responsive:true,maintainAspectRatio:false,scales:{x:{stacked:true},y:{stacked:true,beginAtZero:true}},
+        plugins:{legend:{position:'bottom'},datalabels:{color:'#1b2a35',font:{weight:'bold',size:10},
+          formatter:(v,ctx)=>{if(!v)return'';const b=ctx.chart.data.labels[ctx.dataIndex];const t=(hitMap[b]||0)+(missMap[b]||0);return v+(t?' ('+Math.round(v/t*100)+'%)':'');}}}}
+    });
+  }
+  buildBulanChart('chartPemBulanDarat', hitBulan.Darat, missBulan.Darat);
+  buildBulanChart('chartPemBulanLaut', hitBulan.Laut, missBulan.Laut);
+
+  // Chart per ekspedisi (Hit/Miss/% stacked) untuk satu jenis
+  function buildExpedChart(canvasId, hitMap, missMap){
+    const allExp=[...new Set([...Object.keys(hitMap),...Object.keys(missMap)])].sort((a,b)=>((hitMap[b]||0)+(missMap[b]||0))-((hitMap[a]||0)+(missMap[a]||0)));
+    destroyChart(canvasId);
+    charts[canvasId]=new Chart(document.getElementById(canvasId),{type:'bar',
+      data:{labels:allExp,datasets:[
+        {label:'Hit',data:allExp.map(e=>hitMap[e]||0),backgroundColor:'#3f8f5b'},
+        {label:'Miss',data:allExp.map(e=>missMap[e]||0),backgroundColor:'#c1452f'}
+      ]},
+      options:{responsive:true,maintainAspectRatio:false,scales:{x:{stacked:true},y:{stacked:true,beginAtZero:true}},
+        plugins:{legend:{position:'bottom'},datalabels:{color:'#1b2a35',font:{weight:'bold',size:9},
+          formatter:(v,ctx)=>{if(!v)return'';const e=ctx.chart.data.labels[ctx.dataIndex];const t=(hitMap[e]||0)+(missMap[e]||0);return v+(t?' ('+Math.round(v/t*100)+'%)':'');}}}}
+    });
+  }
+  buildExpedChart('chartPemExpedDarat', hitExped.Darat, missExped.Darat);
+  buildExpedChart('chartPemExpedLaut', hitExped.Laut, missExped.Laut);
+
+  // chart per week (Hit vs Miss stacked)
+  const allWeek=[...new Set([...Object.keys(hitWeek),...Object.keys(missWeek)])].sort((a,b)=>{
+    const na=a.match(/W(\d+)(?: \((\d+)\))?/),nb=b.match(/W(\d+)(?: \((\d+)\))?/);
+    if(na&&nb){ const ya=na[2]||0,yb=nb[2]||0; if(ya!==yb)return ya-yb; return na[1]-nb[1]; }
+    return a.localeCompare(b);
+  });
+  destroyChart('pemWeek');
+  charts.pemWeek=new Chart(document.getElementById('chartPemWeek'),{type:'bar',
+    data:{labels:allWeek,datasets:[
+      {label:'Hit',data:allWeek.map(w=>hitWeek[w]||0),backgroundColor:'#3f8f5b'},
+      {label:'Miss',data:allWeek.map(w=>missWeek[w]||0),backgroundColor:'#c1452f'}
+    ]},
+    options:{responsive:true,maintainAspectRatio:false,scales:{x:{stacked:true},y:{stacked:true,beginAtZero:true}},
+      plugins:{legend:{position:'bottom'},datalabels:{color:'#1b2a35',font:{weight:'bold',size:10},
+        formatter:(v,ctx)=>{if(!v)return'';const w=ctx.chart.data.labels[ctx.dataIndex];const t=(hitWeek[w]||0)+(missWeek[w]||0);return v+(t?' ('+Math.round(v/t*100)+'%)':'');}}}}
+  });
+
+  // kontribusi miss per ekspedisi (gabungan darat+laut)
+  const missExpCombined={};
+  ['Darat','Laut'].forEach(j=>Object.entries(missExped[j]).forEach(([e,v])=>{missExpCombined[e]=(missExpCombined[e]||0)+v;}));
+  const missExpLabels=Object.keys(missExpCombined).sort((a,b)=>missExpCombined[b]-missExpCombined[a]);
+  destroyChart('pemMissExped');
+  charts.pemMissExped=new Chart(document.getElementById('chartPemMissExped'),{type:'bar',
+    data:{labels:missExpLabels,datasets:[{label:'Miss',data:missExpLabels.map(e=>missExpCombined[e]),backgroundColor:'#c1452f'}]},
+    options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},datalabels:{color:'#1b2a35',font:{weight:'bold',size:10},anchor:'end',align:'right'}}}
+  });
+
+  // tabel per bulan+ekspedisi+jenis
+  const rowMap={};
+  pemHitData.forEach(r=>{
+    const bln=pemBulanFromRow(r),exp=pemExpedFromRow(r),d=pemDateFromRow(r),jenis=pemJenisFromRow(r);
+    if(!matchFilter(bln,exp,d))return;
+    const k=bln+'|'+exp+'|'+jenis; if(!rowMap[k])rowMap[k]={bln,exp,jenis,hit:0,miss:0}; rowMap[k].hit+=toNumber(r[colAA]);
+  });
+  pemMissData.forEach(r=>{
+    const bln=pemMissBulan(r),exp=pemMissExped(r),jenis=pemMissJenis(r);
+    if(fE&&exp!==fE)return; if(fB&&bln!==fB)return; if(fQ&&BULAN_Q[bln]!==fQ)return;
+    const k=bln+'|'+exp+'|'+jenis; if(!rowMap[k])rowMap[k]={bln,exp,jenis,hit:0,miss:0}; rowMap[k].miss+=1;
+  });
+  const rows=Object.values(rowMap).sort((a,b)=>{const ia=BULAN_ORDER.indexOf(a.bln),ib=BULAN_ORDER.indexOf(b.bln); if(ia!==ib)return(ia===-1?99:ia)-(ib===-1?99:ib); return(b.hit+b.miss)-(a.hit+a.miss);});
+  document.getElementById('pemBody').innerHTML=rows.map(r=>{const p=r.hit+r.miss,pct=p?Math.round(r.hit/p*100):0;return `<tr><td>${r.bln}</td><td>${r.exp}</td><td>${r.jenis}</td><td>${p}</td><td><span class="badge hit">${r.hit}</span></td><td><span class="badge miss">${r.miss}</span></td><td>${pct}%</td></tr>`;}).join('')||'<tr><td colspan="7" style="text-align:center;color:var(--muted);padding:16px;">Tidak ada data</td></tr>';
+}
+
+// bind pill quartal sekali
+document.getElementById('pillPemQuartal').querySelectorAll('.pill').forEach(p=>{
+  p.addEventListener('click', ()=>{
+    document.getElementById('pillPemQuartal').querySelectorAll('.pill').forEach(x=>x.classList.remove('active'));
+    p.classList.add('active');
+    if(pemHitData.length) renderPemenuhan();
+  });
+});
 </script>
 
 </body>
